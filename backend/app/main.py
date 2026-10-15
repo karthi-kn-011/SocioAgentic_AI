@@ -9,7 +9,7 @@ from fastapi.exceptions import RequestValidationError
 
 from .config import settings
 from .database.database import init_db
-from .routers import health_router, posts_router, approvals_router, schedules_router
+from .routers import health_router, posts_router, approvals_router, schedules_router, auth_router, slack_router
 from .schemas.common import ErrorResponse
 from .scheduler import start_scheduler, stop_scheduler
 
@@ -83,6 +83,10 @@ app.include_router(approvals_router, prefix="/api/v1")
 app.include_router(approvals_router, prefix="/api")  # Unversioned compatibility mount
 app.include_router(schedules_router, prefix="/api/v1")
 app.include_router(schedules_router, prefix="/api")  # Unversioned compatibility mount
+app.include_router(auth_router, prefix="/api/v1")
+app.include_router(auth_router, prefix="/api")  # Unversioned compatibility mount
+app.include_router(slack_router, prefix="/api/v1")
+app.include_router(slack_router, prefix="/api")  # Unversioned compatibility mount
 
 # Mount Static Frontend
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend"))

@@ -63,12 +63,17 @@ class Settings(BaseSettings):
     SLACK_DEFAULT_CHANNEL: str = "#social-approvals"
 
     # Social Platform OAuth (Optional in dev/mock)
+    FRONTEND_ORIGIN: str = "http://localhost:8000"
     X_CLIENT_ID: Optional[str] = None
     X_CLIENT_SECRET: Optional[str] = None
+    X_REDIRECT_URI: str = "http://localhost:8000/api/v1/auth/twitter/callback"
     LINKEDIN_CLIENT_ID: Optional[str] = None
     LINKEDIN_CLIENT_SECRET: Optional[str] = None
+    LINKEDIN_REDIRECT_URI: str = "http://localhost:8000/api/v1/auth/linkedin/callback"
     META_APP_ID: Optional[str] = None
     META_APP_SECRET: Optional[str] = None
+    META_REDIRECT_URI: str = "http://localhost:8000/api/v1/auth/facebook/callback"
+    INSTAGRAM_REDIRECT_URI: str = "http://localhost:8000/api/v1/auth/instagram/callback"
 
     @field_validator("ENVIRONMENT")
     @classmethod

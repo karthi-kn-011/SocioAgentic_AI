@@ -169,6 +169,15 @@ class ContentService:
                 requested_at=now
             )
             db.add(approval)
+        db.flush()
+
+        # Trigger Slack notification card dispatch (mock or live)
+        target_approval_id = existing_approval.id if existing_approval else approval.id
+        try:
+            from .slack_service import SlackService
+            SlackService.dispatch_approval_card(db=db, approval_id=target_approval_id)
+        except Exception as e:
+            logger.warning(f"Slack auto-dispatch skipped or failed for approval #{target_approval_id}: {e}")
 
         # 6. Audit Logging
         log_activity(

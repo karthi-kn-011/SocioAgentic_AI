@@ -411,6 +411,9 @@ function createApprovalCardHtml(item) {
           <button class="btn btn-secondary btn-sm" onclick="window.regenerateApproval(${item.id})">
             🔄 Regenerate Angle
           </button>
+          <button class="btn btn-secondary btn-sm" onclick="window.dispatchSlackApproval(${item.id})">
+            💬 Dispatch Slack
+          </button>
         ` : isUnscheduled ? `
           <div style="display: flex; gap: var(--space-3); align-items: center; justify-content: space-between; flex-wrap: wrap; width: 100%;">
             <span style="font-size: var(--text-xs); color: var(--text-muted);">
@@ -873,7 +876,31 @@ export async function cancelScheduleFromApprovals(scheduleId) {
   }
 }
 
+/**
+ * Dispatches or re-dispatches a Slack interactive approval card for a post.
+ */
+export async function dispatchSlackApproval(approvalId) {
+  try {
+    const res = await fetch(`/api/v1/slack/dispatch/${approvalId}`, {
+      method: 'POST'
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const modeText = data.mock ? 'Mock Mode' : data.channel;
+      toast.show(`Slack approval card dispatched (${modeText})!`, 'success');
+      await loadApprovals();
+    } else {
+      const err = await res.json();
+      toast.show(err.detail || 'Failed to dispatch Slack card.', 'error');
+    }
+  } catch (err) {
+    console.error('Error dispatching Slack approval:', err);
+    toast.show('Network error while dispatching Slack card.', 'error');
+  }
+}
+
 // Attach to window for DOM onclick events
+window.dispatchSlackApproval = dispatchSlackApproval;
 window.approveApproval = approveApproval;
 window.openRejectModal = openRejectModal;
 window.closeRejectionModal = closeRejectionModal;
