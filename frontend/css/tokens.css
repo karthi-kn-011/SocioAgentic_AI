@@ -1,0 +1,169 @@
+/* ==============================================================================
+   AI Social Media Agent — Design Tokens & Theme Variables
+   Specification: Phase 2 Foundation Design System
+   ============================================================================== */
+
+:root {
+  /* --------------------------------------------------------------------------
+     Brand Palette & Accents
+     -------------------------------------------------------------------------- */
+  --primary-50:  #eef2ff;
+  --primary-100: #e0e7ff;
+  --primary-200: #c7d2fe;
+  --primary-300: #a5b4fc;
+  --primary-400: #818cf8;
+  --primary-500: #6366f1; /* Main Indigo */
+  --primary-600: #4f46e5;
+  --primary-700: #4338ca;
+  --primary-800: #3730a3;
+  --primary-900: #312e81;
+
+  --accent-cyan:   #06b6d4;
+  --accent-purple: #8b5cf6;
+  --accent-pink:   #ec4899;
+
+  /* --------------------------------------------------------------------------
+     Semantic Feedback Colors
+     -------------------------------------------------------------------------- */
+  --success-50:  #ecfdf5;
+  --success-500: #10b981; /* Emerald */
+  --success-600: #059669;
+  --success-700: #047857;
+
+  --warning-50:  #fffbeb;
+  --warning-500: #f59e0b; /* Amber */
+  --warning-600: #d97706;
+  --warning-700: #b45309;
+
+  --danger-50:   #fef2f2;
+  --danger-500:  #ef4444; /* Rose/Red */
+  --danger-600:  #dc2626;
+  --danger-700:  #b91c1c;
+
+  --info-50:     #eff6ff;
+  --info-500:    #3b82f6; /* Sky/Blue */
+  --info-600:    #2563eb;
+
+  /* --------------------------------------------------------------------------
+     Platform Brand Colors
+     -------------------------------------------------------------------------- */
+  --color-twitter:   #1d9bf0;
+  --color-linkedin:  #0a66c2;
+  --color-facebook:  #1877f2;
+  --color-instagram: #e1306c;
+
+  /* --------------------------------------------------------------------------
+     Spacing Scale: 4 / 8 / 12 / 16 / 24 / 32 / 48px
+     -------------------------------------------------------------------------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+
+  /* --------------------------------------------------------------------------
+     Border Radii
+     -------------------------------------------------------------------------- */
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  /* --------------------------------------------------------------------------
+     Typography Scale & Fonts
+     -------------------------------------------------------------------------- */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.8125rem; /* 13px */
+  --text-base: 0.9375rem; /* 15px */
+  --text-md:   1.0625rem; /* 17px */
+  --text-lg:   1.25rem;   /* 20px */
+  --text-xl:   1.5rem;    /* 24px */
+  --text-2xl:  1.875rem;  /* 30px */
+  --text-3xl:  2.25rem;   /* 36px */
+
+  --leading-none:   1;
+  --leading-tight:  1.25;
+  --leading-snug:   1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed:1.625;
+
+  /* --------------------------------------------------------------------------
+     Elevation Shadows
+     -------------------------------------------------------------------------- */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.25);
+
+  /* --------------------------------------------------------------------------
+     Transitions & Timing
+     -------------------------------------------------------------------------- */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --------------------------------------------------------------------------
+     Z-Index Layers
+     -------------------------------------------------------------------------- */
+  --z-normal:  1;
+  --z-sticky:  100;
+  --z-sidebar: 200;
+  --z-header:  300;
+  --z-modal:   1000;
+  --z-toast:   2000;
+
+  /* --------------------------------------------------------------------------
+     Dark Theme Defaults (Production SaaS Aesthetic)
+     -------------------------------------------------------------------------- */
+  --bg-app:         #0a0e17;
+  --bg-sidebar:     #0f1422;
+  --bg-header:      rgba(15, 20, 34, 0.85);
+  --bg-surface:     #161c2e;
+  --bg-surface-alt: #1d2438;
+  --bg-surface-hover:#242c44;
+
+  --border-subtle:  #252e46;
+  --border-strong:  #3b4768;
+  --border-focus:   #6366f1;
+
+  --text-primary:   #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted:     #64748b;
+  --text-inverse:   #0f172a;
+
+  --gradient-brand: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+  --gradient-card:  linear-gradient(180deg, rgba(22, 28, 46, 0.85) 0%, rgba(15, 20, 34, 0.95) 100%);
+}
+
+/* --------------------------------------------------------------------------
+   Light Theme Override ([data-theme="light"])
+   -------------------------------------------------------------------------- */
+[data-theme="light"] {
+  --bg-app:         #f8fafc;
+  --bg-sidebar:     #ffffff;
+  --bg-header:      rgba(255, 255, 255, 0.9);
+  --bg-surface:     #ffffff;
+  --bg-surface-alt: #f1f5f9;
+  --bg-surface-hover:#e2e8f0;
+
+  --border-subtle:  #e2e8f0;
+  --border-strong:  #cbd5e1;
+  --border-focus:   #4f46e5;
+
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
+  --text-muted:     #94a3b8;
+  --text-inverse:   #f8fafc;
+
+  --gradient-brand: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #0891b2 100%);
+  --gradient-card:  linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}

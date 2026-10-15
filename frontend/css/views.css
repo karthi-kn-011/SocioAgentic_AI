@@ -1,0 +1,1076 @@
+/* ==============================================================================
+   Views & Feature Styling: Studio, Approvals, Calendar, Analytics, Accounts
+   ============================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Studio (Create Content) Styles
+   -------------------------------------------------------------------------- */
+.studio-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .studio-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.platform-selector-group {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+.platform-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface-alt);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.platform-chip:hover {
+  border-color: var(--border-strong);
+}
+
+.platform-chip input[type="checkbox"] {
+  accent-color: var(--primary-500);
+  cursor: pointer;
+}
+
+.platform-chip.checked {
+  background-color: rgba(99, 102, 241, 0.15);
+  border-color: var(--primary-500);
+  color: var(--primary-300);
+}
+
+/* Prompt Quick-Picks */
+.prompt-chips {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+.prompt-chip {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  background-color: var(--bg-surface);
+  border: 1px dashed var(--border-subtle);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.prompt-chip:hover {
+  color: var(--text-primary);
+  border-color: var(--primary-500);
+}
+
+/* Preview Tabs in Studio */
+.preview-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: var(--space-4);
+  gap: var(--space-2);
+}
+
+.preview-tab-btn {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.preview-tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.preview-tab-btn.active {
+  color: var(--primary-400);
+  border-bottom-color: var(--primary-500);
+}
+
+/* Preview Card Body (Social Post Simulation) */
+.social-preview-box {
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  position: relative;
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.preview-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--gradient-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.preview-author {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-name {
+  font-weight: 700;
+  font-size: var(--text-sm);
+}
+
+.preview-handle {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.preview-content {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.char-counter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.char-counter-bar.warning {
+  color: var(--danger-500);
+  font-weight: 700;
+}
+
+/* Review Score Box */
+.score-badge-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.15);
+  border: 2px solid var(--success-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #34d399;
+}
+
+/* --------------------------------------------------------------------------
+   2. Approvals & Review Queue Styles
+   -------------------------------------------------------------------------- */
+.approval-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.approval-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.approval-actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Slack Block Kit Simulator */
+.slack-card {
+  background-color: #1a1d21;
+  border-left: 4px solid #4a154b;
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  color: #d1d2d3;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin-top: var(--space-4);
+}
+
+.slack-header {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: var(--space-2);
+}
+
+.slack-section {
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  margin-bottom: var(--space-3);
+}
+
+.slack-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.slack-btn {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.slack-btn-primary {
+  background-color: #007a5a;
+  color: #ffffff;
+}
+
+.slack-btn-danger {
+  background-color: #e01e5a;
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   3. Content Calendar Styles (Phase 6.2 Redesign)
+   -------------------------------------------------------------------------- */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.calendar-header-day {
+  text-align: center;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: var(--space-2) 2px;
+  letter-spacing: 0.05em;
+}
+
+.calendar-cell {
+  height: 88px;
+  max-height: 88px;
+  min-height: 88px;
+  background-color: var(--bg-surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 5px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  user-select: none;
+}
+
+.calendar-cell:hover {
+  border-color: var(--border-strong);
+  background-color: var(--bg-surface-hover);
+}
+
+.calendar-cell.today {
+  border-color: var(--primary-500);
+  background-color: rgba(99, 102, 241, 0.07);
+}
+
+.calendar-cell.selected-day {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-subtle);
+  background-color: rgba(99, 102, 241, 0.12);
+}
+
+.calendar-cell.past-day {
+  opacity: 0.65;
+}
+
+.calendar-cell.other-month {
+  opacity: 0.3;
+  background-color: transparent;
+  border-style: dashed;
+}
+
+.calendar-cell-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3px;
+  line-height: 1;
+}
+
+.calendar-date-num {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.calendar-cell.today .calendar-date-num {
+  color: var(--primary-400);
+  font-weight: 800;
+}
+
+.calendar-cell.past-day .calendar-date-num {
+  color: var(--text-muted);
+}
+
+.calendar-cell.other-month .calendar-date-num {
+  color: var(--text-muted);
+}
+
+.calendar-count-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  padding: 1px 5px;
+  border-radius: 8px;
+  line-height: 1.1;
+}
+
+.calendar-events-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.calendar-micro-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  line-height: 1.2;
+  padding: 2px 4px;
+  border-radius: var(--radius-xs);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-left-width: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: transform var(--transition-fast);
+}
+
+.calendar-micro-chip:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-strong);
+}
+
+.calendar-micro-more {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  padding: 1px 4px;
+  border-radius: var(--radius-xs);
+  text-align: center;
+  cursor: pointer;
+  line-height: 1.2;
+  transition: opacity var(--transition-fast);
+}
+
+.calendar-micro-more:hover {
+  opacity: 0.85;
+}
+
+.calendar-mobile-dots {
+  display: none;
+}
+
+.calendar-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   MODERN SAAS CALENDAR SCHEDULE DETAILS UX (Hover Popover & Detail Modal)
+   ========================================================================== */
+
+/* 1. Floating Schedule Hover Popover */
+.calendar-schedule-popover {
+  position: fixed;
+  z-index: 950;
+  width: 295px;
+  max-width: calc(100vw - 28px);
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 14px;
+  box-shadow: 0 14px 34px -4px rgba(15, 23, 42, 0.14), 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+  opacity: 0;
+  transform: scale(0.96) translateY(6px);
+  pointer-events: none;
+  transition: opacity 190ms cubic-bezier(0.16, 1, 0.3, 1), transform 190ms cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  user-select: none;
+}
+
+.calendar-schedule-popover.popover-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+.calendar-schedule-popover.popover-hiding {
+  opacity: 0;
+  transform: scale(0.98);
+  pointer-events: none;
+  transition: opacity 140ms ease-in, transform 140ms ease-in;
+}
+
+.popover-header {
+  padding: 10px 14px;
+  background: var(--bg-surface-alt, #f8fafc);
+  border-bottom: 1px solid var(--border-subtle, #f1f5f9);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.popover-header-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.popover-header-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--color-primary, #6366f1);
+}
+
+.popover-list {
+  padding: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.popover-schedule-item {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle, #f1f5f9);
+  background: var(--bg-surface, #ffffff);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 160ms ease;
+  text-align: left;
+}
+
+.popover-schedule-item:hover, .popover-schedule-item:focus-visible {
+  background: var(--bg-surface-hover, #f8fafc);
+  border-color: var(--color-primary, #6366f1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px -2px rgba(99, 102, 241, 0.14);
+  outline: none;
+}
+
+.popover-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.popover-item-time {
+  font-weight: 700;
+  color: var(--text-secondary, #475569);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.popover-item-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #0f172a);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.popover-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted, #64748b);
+  margin-top: 2px;
+}
+
+/* 2. Full-Screen Modern SaaS Schedule Detail Modal */
+.schedule-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4, 16px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1), visibility 280ms;
+}
+
+.schedule-modal-backdrop.modal-backdrop-open,
+.schedule-modal-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.schedule-modal-backdrop.modal-closing {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 200ms ease-in, visibility 200ms;
+}
+
+.schedule-detail-modal {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, #e2e8f0);
+  border-radius: 18px;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(15, 23, 42, 0.04);
+  width: 100%;
+  max-width: 820px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  z-index: 1051;
+  pointer-events: auto;
+  transform: scale(0.94) translateY(12px);
+  opacity: 0;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.schedule-modal-backdrop.modal-backdrop-open .schedule-detail-modal {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.schedule-modal-backdrop.modal-closing .schedule-detail-modal {
+  transform: scale(0.96) translateY(8px);
+  opacity: 0;
+  transition: transform 200ms ease-in, opacity 200ms ease-in;
+}
+
+/* --- Modal View Panes (Detail <-> Reschedule smooth morphing) --- */
+.modal-view-pane {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-height: 88vh;
+  box-sizing: border-box;
+  will-change: transform, opacity;
+}
+
+.modal-view-pane.active {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Detail view exiting to Reschedule view:
+   opacity: 1 -> 0, transform: translateY(0) scale(1) -> translateY(-8px) scale(0.98) in 220ms */
+.modal-view-pane.view-exit-to-reschedule {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1), transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+/* Reschedule view entering from Detail view:
+   starts at opacity: 0, transform: translateY(12px) scale(0.98) */
+.modal-view-pane.view-enter-from-detail-start {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+}
+
+/* Reschedule view entering active transition:
+   animates to opacity: 1, transform: translateY(0) scale(1) in 240ms */
+.modal-view-pane.view-enter-from-detail-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 240ms cubic-bezier(0.22, 1, 0.36, 1), transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Reschedule view exiting back to Detail view (on Cancel / [✕]):
+   opacity: 1 -> 0, transform: translateY(0) scale(1) -> translateY(12px) scale(0.98) in 200ms */
+.modal-view-pane.view-exit-to-detail {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+  transition: opacity 200ms cubic-bezier(0.22, 1, 0.36, 1), transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+/* Detail view entering back from Reschedule view:
+   starts at opacity: 0, transform: translateY(-8px) scale(0.98) */
+.modal-view-pane.view-enter-from-reschedule-start {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+}
+
+/* Detail view entering active transition:
+   animates to opacity: 1, transform: translateY(0) scale(1) in 240ms */
+.modal-view-pane.view-enter-from-reschedule-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 240ms cubic-bezier(0.22, 1, 0.36, 1), transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Accessibility: respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .modal-view-pane.view-exit-to-reschedule,
+  .modal-view-pane.view-enter-from-detail-active,
+  .modal-view-pane.view-exit-to-detail,
+  .modal-view-pane.view-enter-from-reschedule-active {
+    transform: none !important;
+    transition: opacity 70ms ease !important;
+  }
+  .modal-view-pane.view-enter-from-detail-start,
+  .modal-view-pane.view-enter-from-reschedule-start {
+    transform: none !important;
+    opacity: 0 !important;
+  }
+}
+
+.schedule-modal-header {
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--border-subtle, #e2e8f0);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  background: var(--bg-surface, #ffffff);
+}
+
+.modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.modal-header-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--bg-surface-alt, #f8fafc);
+  border: 1px solid var(--border-subtle, #e2e8f0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  flex-shrink: 0;
+}
+
+.modal-header-text {
+  min-width: 0;
+}
+
+.modal-main-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.modal-sub-meta {
+  font-size: 12px;
+  color: var(--text-muted, #64748b);
+  margin-top: 3px;
+}
+
+.modal-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.modal-close-icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--text-muted, #64748b);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.modal-close-icon-btn:hover {
+  background: var(--bg-surface-hover, #f1f5f9);
+  color: var(--text-primary, #0f172a);
+}
+
+.schedule-modal-body {
+  padding: var(--space-5) var(--space-6);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--bg-base, #f8fafc);
+}
+
+.modal-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, #e2e8f0);
+  border-radius: 12px;
+  padding: var(--space-4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.modal-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-subtle, #f1f5f9);
+}
+
+.modal-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary, #475569);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modal-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: var(--space-3);
+}
+
+.modal-overview-item {
+  background: var(--bg-surface-alt, #f8fafc);
+  border: 1px solid var(--border-subtle, #f1f5f9);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.modal-item-lbl {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.modal-item-val {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
+}
+
+.modal-post-copy-box {
+  background: var(--bg-surface-alt, #f8fafc);
+  border: 1px solid var(--border-subtle, #f1f5f9);
+  border-radius: 8px;
+  padding: var(--space-4);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-primary, #0f172a);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.schedule-modal-footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border-subtle, #e2e8f0);
+  background: var(--bg-surface, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* Reusable Post Details Modal Metadata & Content */
+.post-details-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.post-details-meta-item {
+  background: var(--bg-surface-alt);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.post-details-meta-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.post-details-meta-val {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.post-details-content-box {
+  background: var(--bg-surface-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+/* Mobile Responsiveness for Calendar and Details Bottom Sheet */
+@media (max-width: 640px) {
+  .calendar-grid {
+    gap: 3px;
+  }
+  .calendar-header-day {
+    font-size: 10px;
+    padding: 4px 1px;
+  }
+  .calendar-cell {
+    height: 52px;
+    min-height: 52px;
+    max-height: 52px;
+    padding: 3px 2px;
+  }
+  .calendar-date-num {
+    font-size: 10.5px;
+  }
+  .calendar-count-badge {
+    display: none;
+  }
+  .calendar-events-wrapper {
+    display: none;
+  }
+  .calendar-mobile-dots {
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  .modal-backdrop.open .modal.modal-post-details {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 16px 16px 0 0;
+    max-height: 85vh;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transform: translateY(0);
+    animation: slideUpSheet 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .modal.modal-post-details .btn {
+    min-height: 44px;
+  }
+}
+
+@keyframes slideUpSheet {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Social Accounts Matrix Styles
+   -------------------------------------------------------------------------- */
+.accounts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.account-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  position: relative;
+  overflow: hidden;
+}
+
+.account-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.account-platform-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.platform-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.platform-twitter-bg { background-color: rgba(29, 155, 240, 0.15); color: #1d9bf0; }
+.platform-linkedin-bg { background-color: rgba(10, 102, 194, 0.15); color: #0a66c2; }
+.platform-facebook-bg { background-color: rgba(24, 119, 242, 0.15); color: #1877f2; }
+.platform-instagram-bg { background-color: rgba(225, 48, 108, 0.15); color: #e1306c; }
+
+/* --------------------------------------------------------------------------
+   5. Analytics & Activity Table Styles
+   -------------------------------------------------------------------------- */
+.data-table-container {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--text-sm);
+}
+
+.data-table th {
+  background-color: var(--bg-surface-alt);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.data-table tr:hover td {
+  background-color: var(--bg-surface-hover);
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background-color: var(--bg-surface-alt);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: var(--space-2);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--gradient-brand);
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+}

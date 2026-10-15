@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Social Media Agent — Management Platform</title>
+  <meta name="description" content="Professional, production-oriented AI Social Media Management Platform suitable for an ICT project.">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="/static/css/tokens.css">
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/layout.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+  <link rel="stylesheet" href="/static/css/views.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Left Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo-icon">⚡</div>
+        <div class="brand-details">
+          <span class="brand-title">SocialAgent AI</span>
+          <span class="brand-subtitle">ICT Project 3</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-item active" data-tab="dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Dashboard</span>
+        </div>
+        <div class="nav-item" data-tab="studio">
+          <span class="nav-icon">✨</span>
+          <span class="nav-label">Create Content</span>
+        </div>
+        <div class="nav-item" data-tab="approvals">
+          <span class="nav-icon">📥</span>
+          <span class="nav-label">Review / Approvals</span>
+          <span class="nav-badge" id="sidebar-pending-badge">1</span>
+        </div>
+        <div class="nav-item" data-tab="calendar">
+          <span class="nav-icon">📅</span>
+          <span class="nav-label">Content Calendar</span>
+        </div>
+        <div class="nav-item" data-tab="accounts">
+          <span class="nav-icon">🔗</span>
+          <span class="nav-label">Social Accounts</span>
+        </div>
+        <div class="nav-item" data-tab="analytics">
+          <span class="nav-icon">📈</span>
+          <span class="nav-label">Analytics</span>
+        </div>
+        <div class="nav-item" data-tab="activity">
+          <span class="nav-icon">📋</span>
+          <span class="nav-label">Activity Log</span>
+        </div>
+        <div class="nav-item" data-tab="settings">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Settings</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status-indicator">
+          <span class="status-dot"></span>
+          <span>System Online</span>
+        </div>
+        <div class="theme-toggle-row">
+          <button class="theme-toggle-btn" id="theme-btn" onclick="toggleTheme()">
+            <span id="theme-label">🌙 Dark Mode</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <main class="main-wrapper">
+      <header class="top-header">
+        <div class="header-left">
+          <button class="btn btn-secondary btn-sm mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle Navigation" style="padding: 6px 10px; font-size: 1.1rem; margin-right: var(--space-2);">☰</button>
+          <h1 class="page-title" id="page-title">Dashboard Overview</h1>
+        </div>
+        <div class="header-right">
+          <span id="system-health-pill" class="badge badge-amber">🟡 Connecting...</span>
+          <button class="btn btn-secondary btn-sm" onclick="checkBackendHealth()">🔄 Refresh</button>
+          <button class="btn btn-primary btn-sm" onclick="switchTab('studio')">✨ New Post</button>
+        </div>
+      </header>
+
+      <div class="content-container">
+
+        <!-- ================================================================
+             1. DASHBOARD VIEW
+             ================================================================ -->
+        <section id="view-dashboard" class="view-pane active">
+          <!-- Stat KPI Cards -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+            <div class="stat-card">
+              <span class="stat-label">Total Posts Generated</span>
+              <div class="stat-value" id="kpi-total-posts">-</div>
+              <span class="badge badge-indigo">✨ Multi-Platform AI</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Awaiting Approval</span>
+              <div class="stat-value" style="color: #fbbf24;" id="kpi-pending-posts">-</div>
+              <span class="badge badge-amber">⏳ HITL Queue</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Scheduled in Queue</span>
+              <div class="stat-value" style="color: #38bdf8;" id="kpi-scheduled-posts">-</div>
+              <span class="badge badge-cyan">🕒 APScheduler Engine</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Successfully Published</span>
+              <div class="stat-value" style="color: #34d399;" id="kpi-published-posts">-</div>
+              <span class="badge badge-emerald">🚀 100% Delivery</span>
+            </div>
+          </div>
+
+          <!-- Middle Split: AI Quality Score + Recent Stream -->
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6); margin-bottom: var(--space-6);">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><span>⚡</span> Recent Operations & Activities</div>
+                <button class="btn btn-secondary btn-sm" onclick="switchTab('activity')">View Full Log</button>
+              </div>
+              <div class="card-body">
+                <div id="dashboard-recent-activities" style="display: flex; flex-direction: column; gap: var(--space-3);">
+                  <div style="text-align: center; padding: var(--space-4); color: var(--text-muted); font-size: var(--text-sm);">
+                    Loading recent operations...
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quality Meter -->
+            <div class="card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+              <div class="card-title" style="margin-bottom: var(--space-3);">Average AI Quality Score</div>
+              <div style="font-size: 3.5rem; font-weight: 800; background: var(--gradient-brand); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: var(--space-2) 0;">
+                88%
+              </div>
+              <span class="badge badge-emerald" style="margin-bottom: var(--space-3);">PASSED SAFETY & TONE AUDIT</span>
+              <p style="font-size: var(--text-xs); color: var(--text-muted); max-width: 260px;">
+                Evaluated across platform character limits, brand voice, engagement hooks, and compliance criteria.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             2. CREATE CONTENT (AI STUDIO) VIEW
+             ================================================================ -->
+        <section id="view-studio" class="view-pane">
+          <div class="studio-grid">
+            <!-- Left Column: Generator Form -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><span>✨</span> AI Content Generator Studio</div>
+                <span class="badge badge-indigo">Multi-Agent Workflow</span>
+              </div>
+              <div class="card-body">
+                <!-- Topic Input -->
+                <div class="form-group">
+                  <label class="form-label" for="studio-topic-input">Topic / Campaign Theme</label>
+                  <textarea id="studio-topic-input" class="form-textarea" placeholder="e.g. Announcing our new open-source AI social media agent toolkit, built with LangGraph, FastAPI, and Slack human-in-the-loop approvals..."></textarea>
+                  
+                  <!-- Quick-Picks -->
+                  <div class="prompt-chips">
+                    <span class="prompt-chip" data-prompt="Announcing our autonomous AI Social Media Agent with LangGraph and Slack HITL approvals!">🚀 Product Launch</span>
+                    <span class="prompt-chip" data-prompt="How marketing teams are scaling multi-platform content with automated AI reviews and human oversight.">💡 Thought Leadership</span>
+                    <span class="prompt-chip" data-prompt="3 unexpected lessons from deploying autonomous AI workflows in production environments.">📈 Industry Insights</span>
+                  </div>
+                </div>
+
+                <!-- Theme of Content -->
+                <div class="form-group">
+                  <label class="form-label" for="studio-theme-select">Campaign Theme</label>
+                  <select id="studio-theme-select" class="form-select">
+                    <option value="Thought Leadership">💡 Thought Leadership (Default)</option>
+                    <option value="Product Launch">🚀 Product Launch</option>
+                    <option value="Educational">📚 Educational & How-To</option>
+                    <option value="Storytelling">📖 Storytelling & Narrative</option>
+                    <option value="Promotional">🔥 Promotional & Value Offer</option>
+                    <option value="Inspirational">✨ Inspirational & Mindset</option>
+                    <option value="Informative">📊 Informative & Data Points</option>
+                    <option value="Announcement">📢 Announcement & News</option>
+                    <option value="Engagement">💬 Engagement & Community Poll</option>
+                    <option value="Community">🤝 Community & Culture</option>
+                  </select>
+                </div>
+
+                <!-- Tone of Voice -->
+                <div class="form-group">
+                  <label class="form-label" for="studio-tone-select">Tone of Voice</label>
+                  <select id="studio-tone-select" class="form-select">
+                    <option value="Professional & Engaging">Professional & Engaging (Default)</option>
+                    <option value="Visionary & Thought Leadership">Visionary & Thought Leadership</option>
+                    <option value="Casual & Conversational">Casual & Conversational</option>
+                    <option value="Educational & Informative">Educational & Informative</option>
+                    <option value="Energetic & Bold">Energetic & Bold</option>
+                  </select>
+                </div>
+
+                <!-- AI Model / Provider Selection -->
+                <div class="form-group">
+                  <label class="form-label" for="studio-provider-select">Choose AI Model / Engine</label>
+                  <select id="studio-provider-select" class="form-select">
+                    <option value="auto">⚡ Auto (Best Available Live Model)</option>
+                    <option value="groq" selected>🚀 Groq Cloud (Ultra-Fast LLaMA 3.3 / OSS 20B)</option>
+                    <option value="gemini">✨ Google Gemini (Gemini 1.5 / 2.0 Flash)</option>
+                    <option value="mock">🛡️ Intelligent Mock (Offline / Dev Sandbox)</option>
+                  </select>
+                </div>
+
+                <!-- Target Platforms -->
+                <div class="form-group">
+                  <label class="form-label">Target Social Platforms</label>
+                  <div class="platform-selector-group">
+                    <label class="platform-chip checked">
+                      <input type="checkbox" name="studio-platform" value="TWITTER" checked>
+                      <span>🐦 X / Twitter</span>
+                    </label>
+                    <label class="platform-chip checked">
+                      <input type="checkbox" name="studio-platform" value="LINKEDIN" checked>
+                      <span>💼 LinkedIn</span>
+                    </label>
+                    <label class="platform-chip checked">
+                      <input type="checkbox" name="studio-platform" value="META_FACEBOOK" checked>
+                      <span>📱 Facebook</span>
+                    </label>
+                    <label class="platform-chip checked">
+                      <input type="checkbox" name="studio-platform" value="META_INSTAGRAM" checked>
+                      <span>📷 Instagram</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- CTA Button -->
+                <div style="margin-top: var(--space-6);">
+                  <button class="btn btn-primary" id="studio-generate-btn" style="width: 100%; padding: 0.85rem;">
+                    <span>✨ Generate Post Variants</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Live Previews & AI Review -->
+            <div id="studio-preview-container" class="card" style="display: block;">
+              <div class="card-header">
+                <div class="card-title"><span>📱</span> Live Multi-Platform Preview</div>
+                <div style="display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap;">
+                  <span class="badge badge-cyan" id="studio-provider-badge">AI Provider: Groq</span>
+                  <span class="badge badge-emerald">AI Score: <strong id="studio-score-val">90</strong>/100</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <!-- Preview Tabs & Regenerate Action -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3); flex-wrap: wrap; gap: var(--space-2);">
+                  <div class="preview-tabs" style="margin-bottom: 0;">
+                    <button class="preview-tab-btn active" data-platform="TWITTER">🐦 X (Twitter)</button>
+                    <button class="preview-tab-btn" data-platform="LINKEDIN">💼 LinkedIn</button>
+                    <button class="preview-tab-btn" data-platform="META_FACEBOOK">📱 Facebook</button>
+                    <button class="preview-tab-btn" data-platform="META_INSTAGRAM">📷 Instagram</button>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" id="studio-regenerate-btn" title="Generate alternate angle and hook">
+                    <span>🔄 Regenerate Angle</span>
+                  </button>
+                </div>
+
+                <!-- Simulated Post Box -->
+                <div class="social-preview-box">
+                  <div class="preview-header">
+                    <div class="preview-avatar">AI</div>
+                    <div class="preview-author">
+                      <span class="preview-name">SocialAgent AI</span>
+                      <span class="preview-handle" id="preview-platform-handle">@SocialAgentAI • X Post</span>
+                    </div>
+                  </div>
+                  <div class="preview-content" id="preview-post-text">🚀 Big breakthrough in autonomous AI Social Media Management!
+
+Key insight: Success comes down to agility, consistent execution, and smart human-in-the-loop workflows.
+
+What's your strategy? Drop your thoughts below 👇
+#TechTrends #Productivity #AI</div>
+                  
+                  <div class="char-counter-bar" id="char-counter-bar">
+                    <span id="char-count-num">245 characters</span>
+                    <span>Max: 280 chars</span>
+                  </div>
+                </div>
+
+                <!-- AI Review Feedback Summary -->
+                <div style="margin-top: var(--space-4); padding: var(--space-3); background-color: var(--bg-surface); border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-2); flex-wrap: wrap; gap: var(--space-2);">
+                    <div style="display: flex; align-items: center; gap: var(--space-2);">
+                      <span style="font-size: 1rem;">🤖</span>
+                      <span style="font-weight: 700; font-size: var(--text-xs); text-transform: uppercase;">AI Quality Verdict</span>
+                    </div>
+                    <span id="preview-ai-hook-type" class="badge badge-indigo">Hook: Strategic Insight</span>
+                  </div>
+                  <p id="preview-ai-feedback" style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0;">
+                    ✓ Passed platform character constraints. Strong opening hook, clear CTA, and relevant hashtag placement.
+                  </p>
+                  <div id="preview-ai-rubric-scores" style="display: flex; gap: var(--space-2); margin-top: var(--space-2); flex-wrap: wrap; font-size: var(--text-xs); color: var(--text-muted);">
+                  </div>
+                </div>
+
+                <!-- One-Click Decision Actions -->
+                <div style="display: flex; gap: var(--space-2); margin-top: var(--space-4); flex-wrap: wrap;">
+                  <button class="btn btn-success btn-sm" onclick="toast.show('Post approved and added to scheduled calendar queue!', 'success')">
+                    ✅ Approve & Schedule
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="toast.show('Post published immediately via Mock Publisher!', 'success')">
+                    ⚡ Publish Now
+                  </button>
+                  <button class="btn btn-secondary btn-sm" onclick="switchTab('approvals')">
+                    📥 Send to Approval Queue
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             3. REVIEW / APPROVALS VIEW
+             ================================================================ -->
+        <section id="view-approvals" class="view-pane">
+          <!-- Filter Tabs -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4); flex-wrap: wrap; gap: var(--space-2);">
+            <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+              <button class="btn btn-primary btn-sm approval-filter-btn" data-filter="all">All Posts</button>
+              <button class="btn btn-secondary btn-sm approval-filter-btn" data-filter="pending">⏳ Pending (1)</button>
+              <button class="btn btn-secondary btn-sm approval-filter-btn" data-filter="approved">✅ Approved</button>
+              <button class="btn btn-secondary btn-sm approval-filter-btn" data-filter="rejected">❌ Rejected</button>
+              <button class="btn btn-secondary btn-sm approval-filter-btn" data-filter="published">🚀 Published</button>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="window.refreshApprovalsList ? (window.refreshApprovalsList(), toast.show('Approvals queue refreshed', 'info')) : toast.show('Approvals queue refreshed', 'info')">🔄 Refresh Queue</button>
+          </div>
+
+          <!-- Dynamic Approvals List Container -->
+          <div id="approvals-list-container">
+            <div style="text-align: center; padding: var(--space-8); color: var(--text-muted);">
+              <div style="font-size: 2rem; margin-bottom: var(--space-2);">⏳</div>
+              <div>Loading approval requests from database...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             4. CONTENT CALENDAR VIEW
+             ================================================================ -->
+        <section id="view-calendar" class="view-pane">
+          <div class="card" style="margin-bottom: var(--space-6);">
+            <div class="card-header" style="flex-wrap: wrap; gap: var(--space-3); justify-content: space-between;">
+              <div class="card-title"><span id="calendar-month-title">📅 Content Publishing Calendar</span></div>
+              <div style="display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap;">
+                <div class="btn-group" style="display: flex; gap: var(--space-1);">
+                  <button class="btn btn-secondary btn-sm active" id="btn-calendar-month-view" onclick="window.setCalendarViewMode && window.setCalendarViewMode('month')">📅 Month</button>
+                  <button class="btn btn-secondary btn-sm" id="btn-calendar-list-view" onclick="window.setCalendarViewMode && window.setCalendarViewMode('list')">📋 Queue / List</button>
+                </div>
+                <select id="calendar-tz-select" class="form-select form-select-sm" style="width: auto; padding: 4px 8px; font-size: var(--text-xs);" onchange="window.setCalendarTimezone && window.setCalendarTimezone(this.value)">
+                  <option value="Asia/Kolkata" selected>Asia/Kolkata (IST)</option>
+                  <option value="UTC">UTC (Universal)</option>
+                  <option value="America/New_York">America/New_York (EST)</option>
+                  <option value="America/Los_Angeles">America/Los_Angeles (PST)</option>
+                  <option value="Europe/London">Europe/London (GMT)</option>
+                </select>
+                <button class="btn btn-secondary btn-sm" onclick="window.navigateCalendar && window.navigateCalendar(-1)">◀ Prev</button>
+                <button class="btn btn-secondary btn-sm" onclick="window.navigateCalendar && window.navigateCalendar(0)">Today</button>
+                <button class="btn btn-secondary btn-sm" onclick="window.navigateCalendar && window.navigateCalendar(1)">Next ▶</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="calendar-grid" id="calendar-grid">
+                <!-- Dynamically generated via calendar.js -->
+              </div>
+              <div id="calendar-list-container" style="display: none;">
+                <!-- List view of scheduled posts -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Peak Engagement Window Advisory -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><span>🕒</span> Peak Audience Engagement Advisor</div>
+              <span class="badge badge-cyan">Optimal Timing Heuristics</span>
+            </div>
+            <div class="card-body">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4);">
+                <div style="background: var(--bg-surface-alt); padding: var(--space-3); border-radius: var(--radius-md);">
+                  <div style="font-weight: 700; color: #1d9bf0;">🐦 X (Twitter)</div>
+                  <div style="font-size: var(--text-sm); font-weight: 600; margin-top: 4px;">09:00, 12:00, 17:00 UTC</div>
+                  <div style="font-size: var(--text-xs); color: var(--text-muted);">Midday & evening rush</div>
+                </div>
+                <div style="background: var(--bg-surface-alt); padding: var(--space-3); border-radius: var(--radius-md);">
+                  <div style="font-weight: 700; color: #0a66c2;">💼 LinkedIn</div>
+                  <div style="font-size: var(--text-sm); font-weight: 600; margin-top: 4px;">08:00, 10:00, 14:00 UTC</div>
+                  <div style="font-size: var(--text-xs); color: var(--text-muted);">Business morning peak</div>
+                </div>
+                <div style="background: var(--bg-surface-alt); padding: var(--space-3); border-radius: var(--radius-md);">
+                  <div style="font-weight: 700; color: #1877f2;">📱 Facebook</div>
+                  <div style="font-size: var(--text-sm); font-weight: 600; margin-top: 4px;">13:00, 15:00, 19:00 UTC</div>
+                  <div style="font-size: var(--text-xs); color: var(--text-muted);">Afternoon community hours</div>
+                </div>
+                <div style="background: var(--bg-surface-alt); padding: var(--space-3); border-radius: var(--radius-md);">
+                  <div style="font-weight: 700; color: #e1306c;">📷 Instagram</div>
+                  <div style="font-size: var(--text-sm); font-weight: 600; margin-top: 4px;">11:00, 14:00, 20:00 UTC</div>
+                  <div style="font-size: var(--text-xs); color: var(--text-muted);">Visual discovery peak</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             5. SOCIAL ACCOUNTS VIEW
+             ================================================================ -->
+        <section id="view-accounts" class="view-pane">
+          <div class="card" style="margin-bottom: var(--space-6);">
+            <div class="card-header">
+              <div class="card-title"><span>🔗</span> Connected Social Media Platforms</div>
+              <span class="badge badge-emerald">Sandbox Mode Active</span>
+            </div>
+            <div class="card-body">
+              <p style="color: var(--text-secondary); margin-bottom: var(--space-4);">
+                Connect live social accounts via OAuth 2.0 PKCE or operate in zero-dependency Sandbox Mode. In sandbox mode, publishing, token encryption, and delivery simulation are fully functional.
+              </p>
+
+              <div class="accounts-grid">
+                <!-- X / Twitter -->
+                <div class="account-card">
+                  <div class="account-card-header">
+                    <div class="account-platform-info">
+                      <div class="platform-avatar platform-twitter-bg">🐦</div>
+                      <div>
+                        <div style="font-weight: 700;">X (Twitter)</div>
+                        <div style="font-size: var(--text-xs); color: var(--text-muted);">API v2 • OAuth 2.0 PKCE</div>
+                      </div>
+                    </div>
+                    <span class="badge badge-emerald account-status-pill">● ACTIVE (Sandbox)</span>
+                  </div>
+                  <div style="font-size: var(--text-xs); color: var(--text-secondary);">
+                    Handles tweets, character verification, and token encryption.
+                  </div>
+                  <button class="btn btn-secondary btn-sm connect-account-btn" data-platform="TWITTER">Re-authenticate OAuth</button>
+                </div>
+
+                <!-- LinkedIn -->
+                <div class="account-card">
+                  <div class="account-card-header">
+                    <div class="account-platform-info">
+                      <div class="platform-avatar platform-linkedin-bg">💼</div>
+                      <div>
+                        <div style="font-weight: 700;">LinkedIn</div>
+                        <div style="font-size: var(--text-xs); color: var(--text-muted);">UGC Share API</div>
+                      </div>
+                    </div>
+                    <span class="badge badge-emerald account-status-pill">● ACTIVE (Sandbox)</span>
+                  </div>
+                  <div style="font-size: var(--text-xs); color: var(--text-secondary);">
+                    Dispatches thought leadership articles, formatting, and hashtags.
+                  </div>
+                  <button class="btn btn-secondary btn-sm connect-account-btn" data-platform="LINKEDIN">Re-authenticate OAuth</button>
+                </div>
+
+                <!-- Meta Facebook -->
+                <div class="account-card">
+                  <div class="account-card-header">
+                    <div class="account-platform-info">
+                      <div class="platform-avatar platform-facebook-bg">📱</div>
+                      <div>
+                        <div style="font-weight: 700;">Facebook Page</div>
+                        <div style="font-size: var(--text-xs); color: var(--text-muted);">Meta Graph API</div>
+                      </div>
+                    </div>
+                    <span class="badge badge-emerald account-status-pill">● ACTIVE (Sandbox)</span>
+                  </div>
+                  <div style="font-size: var(--text-xs); color: var(--text-secondary);">
+                    Publishes community updates and open question discussions.
+                  </div>
+                  <button class="btn btn-secondary btn-sm connect-account-btn" data-platform="META_FACEBOOK">Re-authenticate OAuth</button>
+                </div>
+
+                <!-- Meta Instagram -->
+                <div class="account-card">
+                  <div class="account-card-header">
+                    <div class="account-platform-info">
+                      <div class="platform-avatar platform-instagram-bg">📷</div>
+                      <div>
+                        <div style="font-weight: 700;">Instagram</div>
+                        <div style="font-size: var(--text-xs); color: var(--text-muted);">Graph API Media Container</div>
+                      </div>
+                    </div>
+                    <span class="badge badge-emerald account-status-pill">● ACTIVE (Sandbox)</span>
+                  </div>
+                  <div style="font-size: var(--text-xs); color: var(--text-secondary);">
+                    Captions, hashtags, and visual carousel briefs.
+                  </div>
+                  <button class="btn btn-secondary btn-sm connect-account-btn" data-platform="META_INSTAGRAM">Re-authenticate OAuth</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             6. ANALYTICS VIEW
+             ================================================================ -->
+        <section id="view-analytics" class="view-pane">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+            <div class="stat-card">
+              <span class="stat-label">Total Publications</span>
+              <div class="stat-value" id="analytics-total-pubs">-</div>
+              <span class="badge badge-indigo">Dispatched</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Overall Success Rate</span>
+              <div class="stat-value" style="color: #34d399;" id="analytics-success-rate">-</div>
+              <span class="badge badge-emerald" id="analytics-success-badge">Delivery Rate</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Failed Publications</span>
+              <div class="stat-value" style="color: #94a3b8;" id="analytics-failed-pubs">-</div>
+              <span class="badge badge-emerald" id="analytics-failure-badge">Errors</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Average AI Quality</span>
+              <div class="stat-value" style="color: #818cf8;">88%</div>
+              <span class="badge badge-indigo">Audited</span>
+            </div>
+          </div>
+
+          <!-- Authentic Metrics Guardrail Banner -->
+          <div class="alert alert-warning" style="margin-bottom: var(--space-6);">
+            <span>🛡️</span>
+            <span><strong>Authentic Metrics Notice:</strong> External engagement metrics (impressions, likes, comments) require live verified OAuth tokens. To prevent fabricated numbers, external metrics remain explicitly marked as <em>Unavailable (Sandbox Mode)</em>.</span>
+          </div>
+
+          <!-- Publication Logs Table -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><span>📑</span> Publication Execution Audit Log</div>
+              <button class="btn btn-primary btn-sm" id="export-analytics-btn">📥 Export to CSV</button>
+            </div>
+            <div class="card-body">
+              <div class="data-table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Schedule ID</th>
+                      <th>Platform</th>
+                      <th>Status</th>
+                      <th>Execution Mode</th>
+                      <th>External ID</th>
+                      <th>Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody id="analytics-table-body">
+                    <tr>
+                      <td colspan="6" style="text-align: center; color: var(--text-muted); padding: var(--space-4);">
+                        Loading publication records...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             7. ACTIVITY LOG VIEW
+             ================================================================ -->
+        <section id="view-activity" class="view-pane">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><span>📋</span> System Audit Trail & Activity Feed</div>
+              <div style="display: flex; gap: var(--space-3);">
+                <input type="text" id="activity-search-input" class="form-input" style="width: 200px; padding: 4px 8px; font-size: 0.8rem;" placeholder="Search events...">
+                <select id="activity-filter-select" class="form-select" style="width: 160px; padding: 4px 8px; font-size: 0.8rem;">
+                  <option value="ALL">All Actions</option>
+                  <option value="POST_SCHEDULED">Post Scheduled</option>
+                  <option value="POST_PUBLISHED">Post Published</option>
+                  <option value="SCHEDULE_CANCELLED">Schedule Cancelled</option>
+                  <option value="APPROVAL_APPROVED">Approval Approved</option>
+                  <option value="APPROVAL_REJECTED">Approval Rejected</option>
+                  <option value="CONTENT_GENERATED">Content Generated</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="data-table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Timestamp</th>
+                      <th>Action</th>
+                      <th>Post ID</th>
+                      <th>Actor</th>
+                      <th>Details</th>
+                      <th>Inspect</th>
+                    </tr>
+                  </thead>
+                  <tbody id="activity-table-body">
+                    <tr>
+                      <td colspan="6" style="text-align: center; color: var(--text-muted); padding: var(--space-4);">
+                        Loading activity trail...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             8. SETTINGS VIEW
+             ================================================================ -->
+        <section id="view-settings" class="view-pane">
+          <div class="card" style="margin-bottom: var(--space-6);">
+            <div class="card-header">
+              <div class="card-title"><span>⚙️</span> System Settings & Environment Health</div>
+              <span class="badge badge-emerald">Operational</span>
+            </div>
+            <div class="card-body">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+                <div class="form-group">
+                  <span class="form-label">Platform Architecture</span>
+                  <input type="text" class="form-input" value="FastAPI + SQLAlchemy 2.0 + Design Tokens" readonly>
+                </div>
+                <div class="form-group">
+                  <span class="form-label">Token Encryption</span>
+                  <input type="text" class="form-input" value="Fernet (AES-128-CBC + HMAC-SHA256)" readonly>
+                </div>
+                <div class="form-group">
+                  <span class="form-label">Active Database</span>
+                  <input type="text" class="form-input" value="SQLite (Development Mode)" readonly>
+                </div>
+                <div class="form-group">
+                  <span class="form-label">Mock Publishing Simulator</span>
+                  <input type="text" class="form-input" value="Enabled (Zero-Dependency Mode)" readonly>
+                </div>
+              </div>
+
+              <div class="card-title" style="margin-bottom: var(--space-3); font-size: var(--text-sm);">🔑 API Key & Connector Status</div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-3);">
+                <div style="display: flex; justify-content: space-between; padding: var(--space-2) var(--space-3); background: var(--bg-surface-alt); border-radius: var(--radius-sm);">
+                  <span>OpenAI API Key:</span>
+                  <span class="badge badge-indigo">Mock Fallback</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: var(--space-2) var(--space-3); background: var(--bg-surface-alt); border-radius: var(--radius-sm);">
+                  <span>Google Gemini:</span>
+                  <span class="badge badge-indigo">Mock Fallback</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: var(--space-2) var(--space-3); background: var(--bg-surface-alt); border-radius: var(--radius-sm);">
+                  <span>Slack Webhook:</span>
+                  <span class="badge badge-emerald">Mock Active</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: var(--space-2) var(--space-3); background: var(--bg-surface-alt); border-radius: var(--radius-sm);">
+                  <span>Social OAuth:</span>
+                  <span class="badge badge-emerald">Mock Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Reusable Modal Dialog -->
+  <div class="modal-backdrop" id="demo-modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Post Information</h3>
+        <button class="modal-close-btn" onclick="closeModal('demo-modal')" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-4);">
+          Inspection details for the selected social post record.
+        </p>
+        <div class="alert alert-warning">
+          <span>ℹ️</span>
+          <span>Verified against database schema and encryption keys.</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('demo-modal')">Close</button>
+        <button class="btn btn-primary btn-sm" onclick="closeModal('demo-modal'); toast.show('Action verified!', 'success');">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rejection Modal Dialog -->
+  <div class="modal-backdrop" id="rejection-modal" style="display: none;">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rejection-modal-title">
+      <div class="modal-header">
+        <h3 class="modal-title" id="rejection-modal-title">❌ Reject Post & Request Revision</h3>
+        <button class="modal-close-btn" onclick="window.closeRejectionModal && window.closeRejectionModal()" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-3); font-size: var(--text-sm);">
+          Please state the reason for rejecting this post. A valid rejection reason is mandatory and will be logged in the audit trail.
+        </p>
+        <input type="hidden" id="reject-approval-id">
+        <div class="form-group">
+          <label class="form-label" for="reject-reason-input">Rejection Reason <span style="color: var(--color-danger);">*</span></label>
+          <textarea id="reject-reason-input" class="form-textarea" placeholder="e.g. Tone too aggressive for LinkedIn, or needs additional technical details." style="min-height: 100px;" required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" onclick="window.closeRejectionModal && window.closeRejectionModal()">Cancel</button>
+        <button class="btn btn-danger btn-sm" id="confirm-reject-btn" onclick="window.confirmRejection && window.confirmRejection()">Confirm Rejection</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schedule Post Modal Dialog -->
+  <div class="modal-backdrop" id="schedule-post-modal" style="display: none;">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="schedule-modal-title">
+      <div class="modal-header">
+        <h3 class="modal-title" id="schedule-modal-title">📅 Schedule Approved Post</h3>
+        <button class="modal-close-btn" onclick="window.closeScheduleModal && window.closeScheduleModal()" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-3); font-size: var(--text-sm);">
+          Select the target date, time, and timezone for publication. Content is scheduled with idempotency and simulated via MockPublisher.
+        </p>
+        <input type="hidden" id="schedule-post-id">
+        <div id="schedule-post-preview" style="background: var(--bg-surface-alt); padding: var(--space-3); border-radius: var(--radius-sm); margin-bottom: var(--space-4); font-size: var(--text-xs); color: var(--text-secondary); max-height: 90px; overflow-y: auto;"></div>
+
+        <div class="form-group" id="schedule-platforms-group" style="margin-bottom: var(--space-4);">
+          <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Target Channels <span style="color: var(--color-danger);">*</span></span>
+            <span style="font-size: var(--text-xs); color: var(--text-muted); font-weight: 400;">Select channels to schedule</span>
+          </label>
+          <div id="schedule-platforms-list" style="display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-1);"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="schedule-date-input">Publication Date <span style="color: var(--color-danger);">*</span></label>
+          <input type="date" id="schedule-date-input" class="form-input" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="schedule-time-input">Publication Time <span style="color: var(--color-danger);">*</span></label>
+          <input type="time" id="schedule-time-input" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="schedule-timezone-select">Timezone</label>
+          <select id="schedule-timezone-select" class="form-select">
+            <option value="UTC" selected>UTC (Coordinated Universal Time)</option>
+            <option value="Asia/Kolkata">Asia/Kolkata (IST +05:30)</option>
+            <option value="America/New_York">America/New_York (EST/EDT)</option>
+            <option value="America/Los_Angeles">America/Los_Angeles (PST/PDT)</option>
+            <option value="Europe/London">Europe/London (GMT/BST)</option>
+            <option value="Europe/Paris">Europe/Paris (CET/CEST)</option>
+            <option value="Asia/Tokyo">Asia/Tokyo (JST +09:00)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" onclick="window.closeScheduleModal && window.closeScheduleModal()">Cancel</button>
+        <button class="btn btn-primary btn-sm" id="confirm-schedule-btn" onclick="window.confirmSchedule && window.confirmSchedule()">Confirm Schedule</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reschedule Modal Dialog (Unified into schedule-detail-modal-backdrop) -->
+  <div class="modal-backdrop" id="reschedule-modal" style="display: none;"></div>
+
+  <!-- Audit Logs Modal Dialog (Unified into schedule-detail-modal-backdrop) -->
+  <div class="modal-backdrop" id="schedule-logs-modal" style="display: none;"></div>
+
+  <!-- Floating Schedule Hover Popover (Modern SaaS Preview) -->
+  <div id="calendar-schedule-popover" class="calendar-schedule-popover" style="display: none;" role="tooltip" aria-hidden="true">
+    <div class="popover-header">
+      <div class="popover-header-title">
+        <span>📅</span>
+        <span id="popover-date-title">Scheduled Posts</span>
+      </div>
+      <span class="popover-header-badge" id="popover-count-badge">0 posts</span>
+    </div>
+    <div class="popover-list" id="popover-schedule-list">
+      <!-- Dynamic list of selectable schedule cards -->
+    </div>
+  </div>
+
+  <!-- Full-Screen Modern SaaS Schedule Detail Modal Overlay -->
+  <div class="schedule-modal-backdrop modal-backdrop" id="schedule-detail-modal-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-schedule-title">
+    <div class="schedule-detail-modal" id="schedule-detail-modal">
+      
+      <!-- VIEW 1: Schedule Task Detail Pane -->
+      <div id="modal-view-detail" class="modal-view-pane active">
+        <div class="schedule-modal-header">
+          <div class="modal-header-left">
+            <div class="modal-header-icon-box" id="modal-platform-icon">📢</div>
+            <div class="modal-header-text">
+              <h3 class="modal-main-title" id="modal-schedule-title">Post Title</h3>
+              <div class="modal-sub-meta" id="modal-schedule-meta">Schedule #1 · Post #1</div>
+            </div>
+          </div>
+          <div class="modal-header-right">
+            <span class="badge badge-indigo" id="modal-status-badge">SCHEDULED</span>
+            <button class="modal-close-icon-btn" id="modal-close-btn" onclick="window.closeScheduleDetailModal && window.closeScheduleDetailModal()" aria-label="Close modal">✕</button>
+          </div>
+        </div>
+        <div class="schedule-modal-body" id="schedule-modal-body">
+          <!-- Modern SaaS cards rendered dynamically -->
+        </div>
+        <div class="schedule-modal-footer" id="schedule-modal-footer">
+          <!-- Dynamic state-accurate action buttons -->
+        </div>
+      </div>
+
+      <!-- VIEW 2: Reschedule Pane (Seamless morphing transition inside the same modal) -->
+      <div id="modal-view-reschedule" class="modal-view-pane" style="display: none;">
+        <div class="schedule-modal-header">
+          <div class="modal-header-left">
+            <div class="modal-header-icon-box" style="background: rgba(99, 102, 241, 0.1); color: var(--color-primary, #6366f1);">✏️</div>
+            <div class="modal-header-text">
+              <h3 class="modal-main-title" id="reschedule-modal-title">Reschedule Post</h3>
+              <div class="modal-sub-meta" id="reschedule-modal-subtitle">Update publication date and time</div>
+            </div>
+          </div>
+          <div class="modal-header-right">
+            <button class="modal-close-icon-btn" id="reschedule-back-icon-btn" onclick="window.transitionToDetailView && window.transitionToDetailView()" aria-label="Back to details">✕</button>
+          </div>
+        </div>
+        <div class="schedule-modal-body" id="reschedule-modal-body">
+          <input type="hidden" id="reschedule-id">
+          
+          <!-- Current Schedule Information Card -->
+          <div class="modal-card" style="background: var(--bg-surface-alt, #f8fafc); border: 1px solid var(--border-subtle, #e2e8f0);">
+            <div class="modal-card-header">
+              <span class="modal-card-title">📌 Current Schedule Information</span>
+              <span class="badge badge-indigo" id="reschedule-curr-status">SCHEDULED</span>
+            </div>
+            <div class="modal-overview-grid">
+              <div class="modal-overview-item">
+                <div class="modal-item-lbl">Post / Content Title</div>
+                <div class="modal-item-val" id="reschedule-curr-title" style="font-weight: 600;">-</div>
+              </div>
+              <div class="modal-overview-item">
+                <div class="modal-item-lbl">Platform</div>
+                <div class="modal-item-val" id="reschedule-curr-platform">-</div>
+              </div>
+              <div class="modal-overview-item">
+                <div class="modal-item-lbl">Current Date</div>
+                <div class="modal-item-val" id="reschedule-curr-date">-</div>
+              </div>
+              <div class="modal-overview-item">
+                <div class="modal-item-lbl">Current Time</div>
+                <div class="modal-item-val" id="reschedule-curr-time">-</div>
+              </div>
+              <div class="modal-overview-item">
+                <div class="modal-item-lbl">Current Timezone</div>
+                <div class="modal-item-val" id="reschedule-curr-tz">-</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- New Publication Schedule Form Card -->
+          <div class="modal-card">
+            <div class="modal-card-header">
+              <span class="modal-card-title">🗓️ New Publication Schedule</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reschedule-date-input">New Date <span style="color: var(--color-danger);">*</span></label>
+              <input type="date" id="reschedule-date-input" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reschedule-time-input">New Time <span style="color: var(--color-danger);">*</span></label>
+              <input type="time" id="reschedule-time-input" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reschedule-timezone-select">Timezone</label>
+              <select id="reschedule-timezone-select" class="form-select">
+                <option value="Asia/Kolkata">Asia/Kolkata (IST)</option>
+                <option value="UTC" selected>UTC (Universal)</option>
+                <option value="America/New_York">America/New_York (EST)</option>
+                <option value="America/Los_Angeles">America/Los_Angeles (PST)</option>
+                <option value="Europe/London">Europe/London (GMT)</option>
+              </select>
+            </div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: var(--space-2); line-height: 1.4;">
+              ℹ️ Past dates cannot be selected. If selecting today, only future times are valid.
+            </div>
+          </div>
+
+        </div>
+        <div class="schedule-modal-footer">
+          <button class="btn btn-secondary btn-sm" id="cancel-reschedule-btn" onclick="window.transitionToDetailView && window.transitionToDetailView()">Cancel</button>
+          <button class="btn btn-primary btn-sm" id="confirm-reschedule-btn" onclick="window.confirmReschedule && window.confirmReschedule()">Confirm Reschedule</button>
+        </div>
+      </div>
+
+      <!-- VIEW 3: Publication Audit History Pane (Seamless morphing transition inside the same modal) -->
+      <div id="modal-view-logs" class="modal-view-pane" style="display: none;">
+        <div class="schedule-modal-header">
+          <div class="modal-header-left">
+            <div class="modal-header-icon-box" style="background: rgba(14, 165, 233, 0.1); color: #0284c7;">📜</div>
+            <div class="modal-header-text">
+              <h3 class="modal-main-title" id="logs-view-modal-title">Publication Audit History</h3>
+              <div class="modal-sub-meta" id="logs-view-modal-subtitle">Event log & execution trail for scheduled post</div>
+            </div>
+          </div>
+          <div class="modal-header-right">
+            <button class="modal-close-icon-btn" id="logs-back-icon-btn" onclick="window.closeScheduleDetailModal && window.closeScheduleDetailModal()" aria-label="Close modal">✕</button>
+          </div>
+        </div>
+        <div class="schedule-modal-body" id="schedule-logs-body" style="max-height: 65vh; overflow-y: auto;">
+          <!-- Dynamic audit logs rendered here -->
+        </div>
+        <div class="schedule-modal-footer">
+          <button class="btn btn-secondary btn-sm" id="logs-back-btn" onclick="window.transitionToDetailView && window.transitionToDetailView()">Back to Details</button>
+          <button class="btn btn-secondary btn-sm" onclick="window.closeScheduleDetailModal && window.closeScheduleDetailModal()">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Backwards Compatibility Fallback (hidden) -->
+  <div class="modal-backdrop" id="post-details-modal" style="display: none;"></div>
+
+  <!-- Toast Notification Container -->
+
+  <div class="toast-container" aria-live="polite"></div>
+
+  <!-- Application Script (ES Module) -->
+  <script type="module" src="/static/js/app.js"></script>
+</body>
+</html>
