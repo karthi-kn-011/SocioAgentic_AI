@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Social Media Agent — Management Platform</title>
-  <meta name="description" content="Professional, production-oriented AI Social Media Management Platform suitable for an ICT project.">
+  <title>SocioGen AI</title>
+  <meta name="description" content="Socio-contentoGen-AI: Autonomous Multi-Platform Social Media Generation, Scheduling & Publishing Autopilot.">
+
+    <!-- Socio-contentoGen-AI Brand Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/static/assets/icons/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/icons/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/icons/apple-touch-icon.png">
 
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,10 +31,35 @@
     <!-- Left Sidebar Navigation -->
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="brand-logo-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div class="brand-logo-icon" title="SocioGen AI">
+          <svg viewBox="0 0 48 48" fill="none" style="width: 100%; height: 100%;">
+            <defs>
+              <linearGradient id="sb-scg-grad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#7667f8"/>
+                <stop offset="50%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#38bdf8"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#sb-scg-grad)"/>
+            <line x1="13" y1="14" x2="24" y2="24" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="2,2"/>
+            <line x1="35" y1="14" x2="24" y2="24" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="2,2"/>
+            <line x1="13" y1="34" x2="24" y2="24" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="2,2"/>
+            <line x1="35" y1="34" x2="24" y2="24" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="2,2"/>
+            <circle cx="24" cy="24" r="14" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1"/>
+            <circle cx="13" cy="14" r="3.2" fill="#ffffff"/>
+            <circle cx="35" cy="14" r="3.2" fill="#ffffff"/>
+            <circle cx="13" cy="34" r="3.2" fill="#ffffff"/>
+            <circle cx="35" cy="34" r="3.2" fill="#ffffff"/>
+            <path d="M24 12 C24 18, 20 22, 14 24 C20 26, 24 30, 24 36 C24 30, 28 26, 34 24 C28 22, 24 18, 24 12 Z" fill="#ffffff"/>
+            <circle cx="24" cy="24" r="2.2" fill="#4f46e5"/>
+          </svg>
+        </div>
         <div class="brand-details">
-          <span class="brand-title">SocialAgent AI</span>
-          <span class="brand-subtitle">ICT Project 3</span>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="brand-title" style="font-size: 15px; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary);">SocioGen</span>
+            <span class="badge badge-indigo" style="font-size: 10px; font-weight: 700; padding: 2px 5px; border-radius: 4px;">AI</span>
+          </div>
+          <span class="brand-subtitle" style="font-size: 11px; color: var(--text-muted); font-weight: 500; white-space: nowrap;">Contento Engine</span>
         </div>
         <button type="button" class="sidebar-collapse-btn" id="sidebar-collapse-btn" aria-label="Collapse sidebar" title="Collapse sidebar">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg>
@@ -105,30 +136,231 @@
       <div class="content-container">
 
         <!-- ================================================================
-             1. DASHBOARD VIEW
+             1. DASHBOARD VIEW (Cyber Magic & Moment SaaS Layout)
              ================================================================ -->
         <section id="view-dashboard" class="view-pane active">
-          <!-- Stat KPI Cards -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+
+          <!-- Cyber Magic Welcoming Hero Banner -->
+          <div class="dashboard-welcome-hero">
+            <div class="welcome-text-block">
+              <h2 class="welcome-title" id="dashboard-greeting-title">Good afternoon, Operator 👋</h2>
+              <p class="welcome-subtitle" id="dashboard-welcome-quote">SocioGen AI is primed to ideate, synthesize, and orchestrate high-impact multi-channel content campaigns.</p>
+            </div>
+            <div class="welcome-action-block">
+              <button class="btn btn-primary" id="dashboard-quick-create-btn" onclick="switchTab('studio')">
+                <span>✨ Create with AI</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Stat KPI Cards (Moment & Cyber Magic Reference) -->
+          <div class="stat-cards-grid">
             <div class="stat-card">
-              <span class="stat-label">Total Posts Generated</span>
+              <div class="stat-card-header">
+                <span class="stat-label">Total Posts Generated</span>
+                <div class="stat-icon-badge">✨</div>
+              </div>
               <div class="stat-value" id="kpi-total-posts">-</div>
-              <span class="badge badge-indigo">✨ Multi-Platform AI</span>
+              <div class="stat-card-footer">
+                <span class="badge badge-indigo">Multi-Platform AI</span>
+                <span class="stat-trend-indicator">↑ 24% this week</span>
+              </div>
             </div>
+
             <div class="stat-card">
-              <span class="stat-label">Awaiting Approval</span>
+              <div class="stat-card-header">
+                <span class="stat-label">Awaiting Approval</span>
+                <div class="stat-icon-badge">⏳</div>
+              </div>
               <div class="stat-value" style="color: #fbbf24;" id="kpi-pending-posts">-</div>
-              <span class="badge badge-amber">⏳ HITL Queue</span>
+              <div class="stat-card-footer">
+                <span class="badge badge-amber">HITL Queue</span>
+                <span class="stat-trend-indicator">Requires Review</span>
+              </div>
             </div>
+
             <div class="stat-card">
-              <span class="stat-label">Scheduled in Queue</span>
+              <div class="stat-card-header">
+                <span class="stat-label">Scheduled in Queue</span>
+                <div class="stat-icon-badge">🕒</div>
+              </div>
               <div class="stat-value" style="color: #38bdf8;" id="kpi-scheduled-posts">-</div>
-              <span class="badge badge-cyan">🕒 APScheduler Engine</span>
+              <div class="stat-card-footer">
+                <span class="badge badge-cyan">APScheduler</span>
+                <span class="stat-trend-indicator">Automated Dispatch</span>
+              </div>
             </div>
+
             <div class="stat-card">
-              <span class="stat-label">Successfully Published</span>
+              <div class="stat-card-header">
+                <span class="stat-label">Successfully Published</span>
+                <div class="stat-icon-badge">🚀</div>
+              </div>
               <div class="stat-value" style="color: #34d399;" id="kpi-published-posts">-</div>
-              <span class="badge badge-emerald">🚀 100% Delivery</span>
+              <div class="stat-card-footer">
+                <span class="badge badge-emerald">100% Delivery</span>
+                <span class="stat-trend-indicator">All Clear</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content Pipeline Track (Inspired by Cyber Magic) -->
+          <div class="card pipeline-card">
+            <div class="card-header">
+              <div class="card-title"><span>🔄</span> Autonomous Content Pipeline Lifecycle</div>
+              <span class="badge badge-indigo">Active Dispatch Cycle</span>
+            </div>
+            <div class="card-body">
+              <div class="pipeline-track">
+                <div class="pipeline-step" onclick="switchTab('studio')" title="Open AI Studio">
+                  <div class="pipeline-step-icon">💡</div>
+                  <div class="pipeline-step-info">
+                    <div class="pipeline-step-name">1. Idea Generation</div>
+                    <div class="pipeline-step-meta"><strong id="track-ideas-count">18</strong> Angles Formulated</div>
+                  </div>
+                  <span class="pipeline-arrow">➔</span>
+                </div>
+
+                <div class="pipeline-step" onclick="switchTab('studio')" title="Open AI Studio">
+                  <div class="pipeline-step-icon">🤖</div>
+                  <div class="pipeline-step-info">
+                    <div class="pipeline-step-name">2. AI Drafting</div>
+                    <div class="pipeline-step-meta"><strong id="track-drafts-count">13</strong> Variants Ready</div>
+                  </div>
+                  <span class="pipeline-arrow">➔</span>
+                </div>
+
+                <div class="pipeline-step" onclick="switchTab('approvals')" title="Open Approval Queue">
+                  <div class="pipeline-step-icon">📥</div>
+                  <div class="pipeline-step-info">
+                    <div class="pipeline-step-name">3. HITL Review</div>
+                    <div class="pipeline-step-meta"><strong id="track-review-count">6</strong> Awaiting Decision</div>
+                  </div>
+                  <span class="pipeline-arrow">➔</span>
+                </div>
+
+                <div class="pipeline-step" onclick="switchTab('calendar')" title="Open Content Calendar">
+                  <div class="pipeline-step-icon">🗓️</div>
+                  <div class="pipeline-step-info">
+                    <div class="pipeline-step-name">4. Scheduled Queue</div>
+                    <div class="pipeline-step-meta"><strong id="track-sched-count">2</strong> Slotted for Dispatch</div>
+                  </div>
+                  <span class="pipeline-arrow">➔</span>
+                </div>
+
+                <div class="pipeline-step" onclick="switchTab('analytics')" title="Open Analytics">
+                  <div class="pipeline-step-icon">🚀</div>
+                  <div class="pipeline-step-info">
+                    <div class="pipeline-step-name">5. Dispatched</div>
+                    <div class="pipeline-step-meta"><strong id="track-pubs-count">8</strong> Successfully Delivered</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================================================================
+               PRIMARY INTERACTIVE ANALYTICS (Single Dashboard Graph)
+               ================================================================ -->
+          <div class="card graph-card-wide" id="dashboard-primary-graph" style="margin-bottom: var(--space-6);">
+            <div class="card-header" style="flex-wrap: wrap; gap: var(--space-3); justify-content: space-between;">
+              <div>
+                <div class="card-title"><span>📈</span> Content Performance & Audience Engagement Trends</div>
+                <div style="font-size: var(--text-xs); color: var(--text-muted); margin-top: 2px;">
+                  Multi-channel audience reach, engagement rate, and click-through metrics
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;">
+                <!-- Metric Indicators -->
+                <div class="chart-metric-indicators" style="display: flex; gap: var(--space-3); font-size: var(--text-xs);">
+                  <span><span class="legend-dot" style="background: #6366f1;"></span> Total Reach (<strong id="metric-total-reach">16.4K</strong>)</span>
+                  <span><span class="legend-dot" style="background: #ec4899;"></span> Engagement (<strong id="metric-engagement">9.2K</strong>)</span>
+                  <span><span class="legend-dot" style="background: #06b6d4;"></span> Clicks (<strong id="metric-clicks">4.8K</strong>)</span>
+                </div>
+                <!-- Time Range Tabs -->
+                <div class="btn-group chart-time-tabs" role="group" aria-label="Time range">
+                  <button type="button" class="btn btn-secondary btn-sm active" data-range="7D" onclick="window.setChartRange && window.setChartRange('7D', this)">7D</button>
+                  <button type="button" class="btn btn-secondary btn-sm" data-range="14D" onclick="window.setChartRange && window.setChartRange('14D', this)">14D</button>
+                  <button type="button" class="btn btn-secondary btn-sm" data-range="30D" onclick="window.setChartRange && window.setChartRange('30D', this)">30D</button>
+                </div>
+                <!-- Height / Density Sizing Tabs -->
+                <div class="btn-group chart-size-tabs" role="group" aria-label="Graph size">
+                  <button type="button" class="btn btn-secondary btn-sm" data-size="compact" onclick="window.setChartHeight && window.setChartHeight('compact', this)" title="Compact Height (160px)">160px</button>
+                  <button type="button" class="btn btn-secondary btn-sm active" data-size="standard" onclick="window.setChartHeight && window.setChartHeight('standard', this)" title="Standard Height (220px)">220px</button>
+                  <button type="button" class="btn btn-secondary btn-sm" data-size="expanded" onclick="window.setChartHeight && window.setChartHeight('expanded', this)" title="Expanded Height (300px)">300px</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body" style="padding-top: var(--space-2);">
+              <div class="chart-layout-with-y-axis">
+                <div class="chart-y-axis" id="dashboard-chart-y-axis">
+                  <span>20K</span>
+                  <span>15K</span>
+                  <span>10K</span>
+                  <span>5K</span>
+                  <span>0</span>
+                </div>
+                <div class="chart-svg-container" id="dashboard-svg-container" style="height: 220px; position: relative;">
+                  <svg viewBox="0 0 800 220" preserveAspectRatio="none" class="chart-svg" id="performance-chart-svg">
+                    <defs>
+                      <linearGradient id="grad-reach-vivid" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#6366f1" stop-opacity="0.32"/>
+                        <stop offset="100%" stop-color="#6366f1" stop-opacity="0.0"/>
+                      </linearGradient>
+                      <linearGradient id="grad-eng-vivid" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#ec4899" stop-opacity="0.28"/>
+                        <stop offset="100%" stop-color="#ec4899" stop-opacity="0.0"/>
+                      </linearGradient>
+                      <linearGradient id="grad-clicks-vivid" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.22"/>
+                        <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.0"/>
+                      </linearGradient>
+                    </defs>
+
+                    <!-- Horizontal Grid Lines -->
+                    <line id="dash-grid-1" x1="0" y1="35" x2="800" y2="35" stroke="var(--border-subtle)" stroke-dasharray="4,4"/>
+                    <line id="dash-grid-2" x1="0" y1="85" x2="800" y2="85" stroke="var(--border-subtle)" stroke-dasharray="4,4"/>
+                    <line id="dash-grid-3" x1="0" y1="135" x2="800" y2="135" stroke="var(--border-subtle)" stroke-dasharray="4,4"/>
+                    <line id="dash-grid-4" x1="0" y1="185" x2="800" y2="185" stroke="var(--border-subtle)" stroke-dasharray="4,4"/>
+                    <line id="dash-grid-baseline" x1="0" y1="210" x2="800" y2="210" stroke="var(--border-subtle)"/>
+
+                    <!-- Gradient Area Fills -->
+                    <path id="path-fill-reach" d="M 0 210 L 0 130 C 130 85, 260 150, 400 75 C 530 20, 660 65, 800 42 L 800 210 Z" fill="url(#grad-reach-vivid)"/>
+                    <path id="path-fill-eng" d="M 0 210 L 0 160 C 130 125, 260 180, 400 115 C 530 60, 660 105, 800 80 L 800 210 Z" fill="url(#grad-eng-vivid)"/>
+                    <path id="path-fill-clicks" d="M 0 210 L 0 180 C 130 155, 260 190, 400 150 C 530 110, 660 140, 800 120 L 800 210 Z" fill="url(#grad-clicks-vivid)"/>
+
+                    <!-- Spline Curves -->
+                    <path id="path-line-reach" d="M 0 130 C 130 85, 260 150, 400 75 C 530 20, 660 65, 800 42" fill="none" stroke="#6366f1" stroke-width="2.75" stroke-linecap="round"/>
+                    <path id="path-line-eng" d="M 0 160 C 130 125, 260 180, 400 115 C 530 60, 660 105, 800 80" fill="none" stroke="#ec4899" stroke-width="2.75" stroke-linecap="round"/>
+                    <path id="path-line-clicks" d="M 0 180 C 130 155, 260 190, 400 150 C 530 110, 660 140, 800 120" fill="none" stroke="#06b6d4" stroke-width="2.75" stroke-linecap="round"/>
+
+                    <!-- Active Guideline & Interactive Highlight Points -->
+                    <line id="chart-focal-line" x1="400" y1="20" x2="400" y2="210" stroke="#7667f8" stroke-dasharray="3,3" stroke-width="1.5"/>
+                    <circle id="point-reach" cx="400" cy="75" r="5" fill="#6366f1" stroke="#ffffff" stroke-width="2"/>
+                    <circle id="point-eng" cx="400" cy="115" r="4.5" fill="#ec4899" stroke="#ffffff" stroke-width="2"/>
+                    <circle id="point-clicks" cx="400" cy="150" r="4.5" fill="#06b6d4" stroke="#ffffff" stroke-width="2"/>
+                  </svg>
+
+                  <!-- Floating Tooltip Pill on Focal Point -->
+                  <div class="moment-active-tooltip" id="dashboard-chart-tooltip" style="left: 50%; top: 20px;">
+                    <div class="tooltip-date" id="tooltip-day-label">Thu (Peak Dispatch)</div>
+                    <div class="tooltip-metric"><span class="dot-indigo"></span> Reach: <strong id="tooltip-reach-val">16.4K</strong></div>
+                    <div class="tooltip-metric"><span class="dot-pink"></span> Engagement: <strong id="tooltip-eng-val">9.2K</strong></div>
+                    <div class="tooltip-metric"><span class="dot-cyan"></span> Clicks: <strong id="tooltip-clicks-val">4.8K</strong></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dynamic X-Axis Days / Labels -->
+              <div class="chart-x-axis" id="dashboard-chart-x-axis" style="padding-left: 45px;">
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu (Peak)</span>
+                <span>Fri</span>
+                <span>Sat</span>
+                <span>Sun</span>
+              </div>
             </div>
           </div>
 
@@ -234,19 +466,23 @@
                   <div class="platform-selector-group">
                     <label class="platform-chip checked">
                       <input type="checkbox" name="studio-platform" value="TWITTER" checked>
-                      <span>🐦 X / Twitter</span>
+                      <svg class="official-inline-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                      <span>X (Twitter)</span>
                     </label>
                     <label class="platform-chip checked">
                       <input type="checkbox" name="studio-platform" value="LINKEDIN" checked>
-                      <span>💼 LinkedIn</span>
+                      <svg class="official-inline-icon" viewBox="0 0 24 24" fill="#0a66c2"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.79v8.37H6.46v-8.37M7.86 6.5a1.63 1.63 0 0 0-1.63 1.62 1.63 1.63 0 0 0 1.63 1.63 1.63 1.63 0 0 0 1.63-1.63A1.63 1.63 0 0 0 7.86 6.5Z"/></svg>
+                      <span>LinkedIn</span>
                     </label>
                     <label class="platform-chip checked">
                       <input type="checkbox" name="studio-platform" value="META_FACEBOOK" checked>
-                      <span>📱 Facebook</span>
+                      <svg class="official-inline-icon" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                      <span>Facebook</span>
                     </label>
                     <label class="platform-chip checked">
                       <input type="checkbox" name="studio-platform" value="META_INSTAGRAM" checked>
-                      <span>📷 Instagram</span>
+                      <svg class="official-inline-icon" viewBox="0 0 24 24" fill="#e1306c"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                      <span>Instagram</span>
                     </label>
                   </div>
                 </div>
@@ -273,12 +509,24 @@
                 <!-- Preview Tabs & Regenerate Action -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3); flex-wrap: wrap; gap: var(--space-2);">
                   <div class="preview-tabs" style="margin-bottom: 0;">
-                    <button class="preview-tab-btn active" data-platform="TWITTER">🐦 X (Twitter)</button>
-                    <button class="preview-tab-btn" data-platform="LINKEDIN">💼 LinkedIn</button>
-                    <button class="preview-tab-btn" data-platform="META_FACEBOOK">📱 Facebook</button>
-                    <button class="preview-tab-btn" data-platform="META_INSTAGRAM">📷 Instagram</button>
+                    <button class="preview-tab-btn active" data-platform="TWITTER">
+                      <svg class="official-inline-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                      <span>X (Twitter)</span>
+                    </button>
+                    <button class="preview-tab-btn" data-platform="LINKEDIN">
+                      <svg class="official-inline-icon" viewBox="0 0 24 24" fill="#0a66c2"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.79v8.37H6.46v-8.37M7.86 6.5a1.63 1.63 0 0 0-1.63 1.62 1.63 1.63 0 0 0 1.63 1.63 1.63 1.63 0 0 0 1.63-1.63A1.63 1.63 0 0 0 7.86 6.5Z"/></svg>
+                      <span>LinkedIn</span>
+                    </button>
+                    <button class="preview-tab-btn" data-platform="META_FACEBOOK">
+                      <svg class="official-inline-icon" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                      <span>Facebook</span>
+                    </button>
+                    <button class="preview-tab-btn" data-platform="META_INSTAGRAM">
+                      <svg class="official-inline-icon" viewBox="0 0 24 24" fill="#e1306c"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                      <span>Instagram</span>
+                    </button>
                   </div>
-                  <button class="btn btn-secondary btn-sm" id="studio-regenerate-btn" title="Generate alternate angle and hook">
+                  <button class="btn btn-secondary btn-sm" id="studio-regenerate-btn"  title="Generate alternate angle and hook">
                     <span>🔄 Regenerate Angle</span>
                   </button>
                 </div>
@@ -288,8 +536,8 @@
                   <div class="preview-header">
                     <div class="preview-avatar">AI</div>
                     <div class="preview-author">
-                      <span class="preview-name">SocialAgent AI</span>
-                      <span class="preview-handle" id="preview-platform-handle">@SocialAgentAI • X Post</span>
+                      <span class="preview-name">SocioGen AI</span>
+                      <span class="preview-handle" id="preview-platform-handle">@SocioGenAI • X Post</span>
                     </div>
                   </div>
                   <div class="preview-content" id="preview-post-text">🚀 Big breakthrough in autonomous AI Social Media Management!
@@ -448,103 +696,364 @@ What's your strategy? Drop your thoughts below 👇
                 <!-- X / Twitter -->
                 <div class="account-card">
                   <div class="account-card-header">
-                    <div class="account-platform-info">
-                      <div class="platform-avatar platform-twitter-bg">🐦</div>
-                      <div>
-                        <div style="font-weight: 700;">X (Twitter)</div>
-                        <div style="font-size: var(--text-xs); color: var(--text-muted);">API v2 • OAuth 2.0 PKCE</div>
-                      </div>
+                    <div class="platform-avatar platform-twitter-bg" title="X (Twitter)">
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="#ffffff">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 24.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                      </svg>
                     </div>
-                    <span class="badge badge-emerald account-status-pill">● ACTIVE (Sandbox)</span>
+                    <span class="account-status-pill status-disconnected"><span class="status-pulse-dot dot-disconnected"></span> Not Connected</span>
                   </div>
-                  <div style="font-size: var(--text-xs); color: var(--text-secondary);">
+                  <div class="account-card-identity">
+                    <div class="account-name">X (Twitter)</div>
+                    <div class="account-api-tag">API v2 · OAuth 2.0 PKCE</div>
+                  </div>
+                  <div class="account-desc">
                     Handles tweets, character verification, and token encryption.
                   </div>
-                  <button class="btn btn-secondary btn-sm connect-account-btn" data-platform="TWITTER">Re-authenticate OAuth</button>
+                  <button class="btn btn-primary btn-sm connect-account-btn" data-platform="TWITTER">Connect Account</button>
                 </div>
 
                 <!-- LinkedIn -->
                 <div class="account-card">
                   <div class="account-card-header">
-                    <div class="account-platform-info">
-                      <div class="platform-avatar platform-linkedin-bg">💼</div>
-                      <div>
-                        <div style="font-weight: 700;">LinkedIn</div>
-                        <div style="font-size: var(--text-xs); color: var(--text-muted);">UGC Share API</div>
-                      </div>
+                    <div class="platform-avatar platform-linkedin-bg" title="LinkedIn">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+                        <circle cx="5" cy="5" r="2.2" />
+                        <rect x="2.8" y="9.2" width="4.4" height="11.8" rx="0.5" />
+                        <path d="M9.8 9.2h4.2v1.8c.7-1.1 2-2 4.2-2 3.5 0 5 2.3 5 5.8V21h-4.4v-5.2c0-1.4-.5-2.3-1.8-2.3-1.3 0-1.9.9-1.9 2.3V21H9.8V9.2z"/>
+                      </svg>
                     </div>
-                    <span class="badge badge-emerald account-status-pill">● ACTIVE (Sandbox)</span>
+                    <span class="account-status-pill status-disconnected"><span class="status-pulse-dot dot-disconnected"></span> Not Connected</span>
                   </div>
-                  <div style="font-size: var(--text-xs); color: var(--text-secondary);">
+                  <div class="account-card-identity">
+                    <div class="account-name">LinkedIn</div>
+                    <div class="account-api-tag">UGC Share API · Professional</div>
+                  </div>
+                  <div class="account-desc">
                     Dispatches thought leadership articles, formatting, and hashtags.
                   </div>
-                  <button class="btn btn-secondary btn-sm connect-account-btn" data-platform="LINKEDIN">Re-authenticate OAuth</button>
+                  <button class="btn btn-primary btn-sm connect-account-btn" data-platform="LINKEDIN">Connect Account</button>
                 </div>
 
                 <!-- Meta Facebook -->
                 <div class="account-card">
                   <div class="account-card-header">
-                    <div class="account-platform-info">
-                      <div class="platform-avatar platform-facebook-bg">📱</div>
-                      <div>
-                        <div style="font-weight: 700;">Facebook Page</div>
-                        <div style="font-size: var(--text-xs); color: var(--text-muted);">Meta Graph API</div>
-                      </div>
+                    <div class="platform-avatar platform-facebook-bg" title="Facebook Page">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+                        <path d="M14 21.5v-8.2h2.8l.4-3.3H14V7.9c0-1 .3-1.6 1.7-1.6h1.8V3.4c-.3 0-1.5-.1-2.8-.1-2.8 0-4.7 1.7-4.7 4.8v2.4H7.2V10h2.8v11.5H14z"/>
+                      </svg>
                     </div>
-                    <span class="badge badge-emerald account-status-pill">● ACTIVE (Sandbox)</span>
+                    <span class="account-status-pill status-disconnected"><span class="status-pulse-dot dot-disconnected"></span> Not Connected</span>
                   </div>
-                  <div style="font-size: var(--text-xs); color: var(--text-secondary);">
+                  <div class="account-card-identity">
+                    <div class="account-name">Facebook Page</div>
+                    <div class="account-api-tag">Meta Graph API · Pages</div>
+                  </div>
+                  <div class="account-desc">
                     Publishes community updates and open question discussions.
                   </div>
-                  <button class="btn btn-secondary btn-sm connect-account-btn" data-platform="META_FACEBOOK">Re-authenticate OAuth</button>
+                  <button class="btn btn-primary btn-sm connect-account-btn" data-platform="META_FACEBOOK">Connect Account</button>
                 </div>
 
                 <!-- Meta Instagram -->
                 <div class="account-card">
                   <div class="account-card-header">
-                    <div class="account-platform-info">
-                      <div class="platform-avatar platform-instagram-bg">📷</div>
-                      <div>
-                        <div style="font-weight: 700;">Instagram</div>
-                        <div style="font-size: var(--text-xs); color: var(--text-muted);">Graph API Media Container</div>
-                      </div>
+                    <div class="platform-avatar platform-instagram-bg" title="Instagram">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                      </svg>
                     </div>
-                    <span class="badge badge-emerald account-status-pill">● ACTIVE (Sandbox)</span>
+                    <span class="account-status-pill status-disconnected"><span class="status-pulse-dot dot-disconnected"></span> Not Connected</span>
                   </div>
-                  <div style="font-size: var(--text-xs); color: var(--text-secondary);">
+                  <div class="account-card-identity">
+                    <div class="account-name">Instagram</div>
+                    <div class="account-api-tag">Graph API · Media Container</div>
+                  </div>
+                  <div class="account-desc">
                     Captions, hashtags, and visual carousel briefs.
                   </div>
-                  <button class="btn btn-secondary btn-sm connect-account-btn" data-platform="META_INSTAGRAM">Re-authenticate OAuth</button>
-                </div>
-              </div>
+                  <button class="btn btn-primary btn-sm connect-account-btn" data-platform="META_INSTAGRAM">Connect Account</button>
+                </div></div>
             </div>
           </div>
         </section>
 
         <!-- ================================================================
-             6. ANALYTICS VIEW
+             6. ANALYTICS VIEW (Moment & Cyber Magic 3-Graph Suite)
              ================================================================ -->
         <section id="view-analytics" class="view-pane">
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+
+          <!-- Stat KPI Cards -->
+          <div class="stat-cards-grid">
             <div class="stat-card">
-              <span class="stat-label">Total Publications</span>
+              <div class="stat-card-header">
+                <span class="stat-label">Total Publications</span>
+                <div class="stat-icon-badge">📑</div>
+              </div>
               <div class="stat-value" id="analytics-total-pubs">-</div>
-              <span class="badge badge-indigo">Dispatched</span>
+              <div class="stat-card-footer">
+                <span class="badge badge-indigo">Dispatched</span>
+                <span class="stat-trend-indicator">Audit Trail</span>
+              </div>
             </div>
+
             <div class="stat-card">
-              <span class="stat-label">Overall Success Rate</span>
+              <div class="stat-card-header">
+                <span class="stat-label">Overall Success Rate</span>
+                <div class="stat-icon-badge">✅</div>
+              </div>
               <div class="stat-value" style="color: #34d399;" id="analytics-success-rate">-</div>
-              <span class="badge badge-emerald" id="analytics-success-badge">Delivery Rate</span>
+              <div class="stat-card-footer">
+                <span class="badge badge-emerald" id="analytics-success-badge">Delivery Rate</span>
+                <span class="stat-trend-indicator">100% Target</span>
+              </div>
             </div>
+
             <div class="stat-card">
-              <span class="stat-label">Failed Publications</span>
+              <div class="stat-card-header">
+                <span class="stat-label">Failed Publications</span>
+                <div class="stat-icon-badge">🛡️</div>
+              </div>
               <div class="stat-value" style="color: #94a3b8;" id="analytics-failed-pubs">-</div>
-              <span class="badge badge-emerald" id="analytics-failure-badge">Errors</span>
+              <div class="stat-card-footer">
+                <span class="badge badge-emerald" id="analytics-failure-badge">Errors</span>
+                <span class="stat-trend-indicator">Zero Failures</span>
+              </div>
             </div>
+
             <div class="stat-card">
-              <span class="stat-label">Average AI Quality</span>
+              <div class="stat-card-header">
+                <span class="stat-label">Average AI Quality</span>
+                <div class="stat-icon-badge">⭐</div>
+              </div>
               <div class="stat-value" style="color: #818cf8;" id="analytics-ai-quality">-</div>
-              <span class="badge badge-indigo" id="analytics-ai-badge">Audited</span>
+              <div class="stat-card-footer">
+                <span class="badge badge-indigo" id="analytics-ai-badge">Audited</span>
+                <span class="stat-trend-indicator">Passed Rubric</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- THREE-GRAPH SUITE (Structured like Reference Image 3 - Moment) -->
+          
+          <!-- GRAPH 1 (TOP HERO): Social Media Performance Trends -->
+          <div class="card graph-hero-card" style="margin-bottom: var(--space-6);">
+            <div class="card-header" style="flex-wrap: wrap; gap: var(--space-3);">
+              <div>
+                <div class="card-title"><span>📈</span> Social Media Performance Trends (Conversion & Engagement)</div>
+                <div style="font-size: var(--text-xs); color: var(--text-muted); margin-top: 3px;">
+                  Audience engagement conversion rate and post interaction trajectory over time
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;">
+                <div class="chart-legend-row">
+                  <span class="chart-legend-item"><span class="legend-dot" style="background-color: #10b981;"></span> Engagement Rate (40.0%)</span>
+                  <span class="chart-legend-item"><span class="legend-dot" style="background-color: #3b82f6;"></span> Conversion Rate (30.0%)</span>
+                </div>
+                <div class="date-badge-pill">📅 Mar 14, 2026</div>
+              </div>
+            </div>
+            <div class="card-body" style="padding-top: var(--space-2);">
+              <div class="moment-chart-wrapper">
+                <!-- Y-Axis Scale -->
+                <div class="chart-y-axis">
+                  <span>60%</span>
+                  <span>50%</span>
+                  <span>40%</span>
+                  <span>30%</span>
+                  <span>20%</span>
+                  <span>10%</span>
+                </div>
+                <!-- SVG Line Graph with Shaded Gradient Area & Guideline Tooltip -->
+                <div class="chart-svg-viewport" id="analytics-hero-viewport" style="position: relative;">
+                  <svg viewBox="0 0 800 240" preserveAspectRatio="none" class="chart-svg" id="analytics-hero-svg">
+                    <defs>
+                      <linearGradient id="grad-moment-green" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
+                        <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+                      </linearGradient>
+                      <linearGradient id="grad-moment-blue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.20"/>
+                        <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"/>
+                      </linearGradient>
+                    </defs>
+
+                    <!-- Horizontal Grid Dotted Lines (60%, 50%, 40%, 30%, 20%, 10%) -->
+                    <line x1="0" y1="20" x2="800" y2="20" stroke="var(--border-subtle)" stroke-dasharray="4,4"/>
+                    <line x1="0" y1="60" x2="800" y2="60" stroke="var(--border-subtle)" stroke-dasharray="4,4"/>
+                    <line x1="0" y1="100" x2="800" y2="100" stroke="var(--border-subtle)" stroke-dasharray="4,4"/>
+                    <line x1="0" y1="140" x2="800" y2="140" stroke="var(--border-subtle)" stroke-dasharray="4,4"/>
+                    <line x1="0" y1="180" x2="800" y2="180" stroke="var(--border-subtle)" stroke-dasharray="4,4"/>
+                    <line x1="0" y1="220" x2="800" y2="220" stroke="var(--border-subtle)"/>
+
+                    <!-- Green Series Shaded Area -->
+                    <path d="M 0 100 L 120 100 L 160 115 L 260 110 L 360 112 L 480 110 L 560 115 L 680 125 L 750 110 L 800 80 L 800 220 L 0 220 Z" fill="url(#grad-moment-green)"/>
+                    <!-- Blue Series Shaded Area -->
+                    <path d="M 0 140 L 70 140 L 110 180 L 170 140 L 350 140 L 480 130 L 680 135 L 800 175 L 800 220 L 0 220 Z" fill="url(#grad-moment-blue)"/>
+
+                    <!-- Green Spline (Engagement Rate 40%) -->
+                    <path id="analytics-hero-path-green" d="M 0 100 L 120 100 L 160 115 L 260 110 L 360 112 L 480 110 L 560 115 L 680 125 L 750 110 L 800 80" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                    <!-- Blue Spline (Conversion Rate 30%) -->
+                    <path id="analytics-hero-path-blue" d="M 0 140 L 70 140 L 110 180 L 170 140 L 350 140 L 480 130 L 680 135 L 800 175" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linejoin="round"/>
+
+                    <!-- Dashed Guideline & Interactive Tooltip (Exact match to Reference Image 3) -->
+                    <line id="analytics-hero-line" x1="480" y1="20" x2="480" y2="220" stroke="var(--border-strong)" stroke-dasharray="3,3" stroke-width="1.5"/>
+                    <circle id="analytics-hero-pt-green" cx="480" cy="110" r="4.5" fill="#10b981" stroke="#ffffff" stroke-width="2"/>
+                    <circle id="analytics-hero-pt-blue" cx="480" cy="130" r="4.5" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+                  </svg>
+                  
+                  <!-- Floating Tooltip Box (from Reference Image 3) -->
+                  <div class="moment-tooltip-box" id="analytics-hero-tooltip" style="left: 60%; top: 38%; pointer-events: none;">
+                    <div class="tooltip-header" id="analytics-hero-tooltip-header">Mar 14, 2026</div>
+                    <div class="tooltip-row"><span class="tooltip-dot" style="background:#10b981;"></span> Conversion rate: <strong id="analytics-hero-tooltip-conv">40.0%</strong></div>
+                    <div class="tooltip-row"><span class="tooltip-dot" style="background:#3b82f6;"></span> Engagement rate: <strong id="analytics-hero-tooltip-eng">30.0%</strong></div>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-x-axis" style="padding-left: 45px;">
+                <span>Jan</span>
+                <span>Feb</span>
+                <span>Mar</span>
+                <span>Apr</span>
+                <span>May</span>
+                <span>Jun</span>
+                <span>Jul</span>
+                <span>Aug</span>
+                <span>Sep</span>
+                <span>Oct</span>
+                <span>Nov</span>
+                <span>Dec</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTTOM TWO-COLUMN SPLIT (GRAPH 2 & GRAPH 3) -->
+          <div class="analytics-split-grid" style="margin-bottom: var(--space-6);">
+
+            <!-- GRAPH 2 (BOTTOM-LEFT): Content Performance Analytics (Dual Spline Wave) -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title"><span>🌊</span> Content Performance by Channel Wave</div>
+                  <div style="font-size: var(--text-xs); color: var(--text-muted); margin-top: 2px;">
+                    Organic Social Reach vs. AI-Optimized Viral Engagement
+                  </div>
+                </div>
+                <div class="chart-legend-row" style="font-size: 11px;">
+                  <span class="chart-legend-item"><span class="legend-dot" style="background-color: #10b981;"></span> Organic Reach</span>
+                  <span class="chart-legend-item"><span class="legend-dot" style="background-color: #3b82f6;"></span> AI Engagement</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="chart-svg-viewport" id="analytics-wave-viewport" style="height: 180px; position: relative;">
+                  <svg viewBox="0 0 500 180" preserveAspectRatio="none" id="analytics-wave-svg" style="width: 100%; height: 100%;">
+                    <line x1="0" y1="50" x2="500" y2="50" stroke="var(--border-subtle)" stroke-dasharray="3,3"/>
+                    <line x1="0" y1="100" x2="500" y2="100" stroke="var(--border-subtle)" stroke-dasharray="3,3"/>
+                    <line x1="0" y1="150" x2="500" y2="150" stroke="var(--border-subtle)"/>
+
+                    <!-- Wave 1 (Green) -->
+                    <path id="analytics-wave-path-green" d="M 0 110 C 80 110, 120 150, 180 120 C 230 90, 270 70, 340 70 C 400 70, 440 120, 500 90" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+                    <!-- Wave 2 (Blue) -->
+                    <path id="analytics-wave-path-blue" d="M 0 140 C 90 140, 130 110, 190 135 C 250 160, 310 90, 380 110 C 430 125, 470 145, 500 135" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+
+                    <!-- Peak Indicator Dot (Reference Image 3) -->
+                    <line id="analytics-wave-line" x1="280" y1="40" x2="280" y2="150" stroke="#7667f8" stroke-dasharray="2,2"/>
+                    <circle id="analytics-wave-pt" cx="280" cy="80" r="5" fill="#4f46e5" stroke="#ffffff" stroke-width="2"/>
+                  </svg>
+                  
+                  <div class="moment-mini-tooltip" id="analytics-wave-tooltip" style="left: 56%; top: 12%; pointer-events: none;">
+                    <div id="analytics-wave-tooltip-header">Mar 14, 2026</div>
+                    <strong id="analytics-wave-tooltip-val">2,345 Interactions</strong>
+                  </div>
+                </div>
+                <div class="chart-x-axis" style="padding-top: 6px;">
+                  <span>Q1 (Jan - Mar)</span>
+                  <span>Q2 (Apr - Jun)</span>
+                  <span>Q3 (Jul - Sep)</span>
+                  <span>Q4 (Oct - Dec)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- GRAPH 3 (BOTTOM-RIGHT): Platform-Wise Performance Distribution (Lollipop Bars) -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title"><span>📊</span> Platform-Wise Performance Distribution</div>
+                  <div style="font-size: var(--text-xs); color: var(--text-muted); margin-top: 2px;">
+                    Comparative volume & delivery index across connected networks
+                  </div>
+                </div>
+                <div class="chart-legend-row" style="font-size: 11px;">
+                  <span class="chart-legend-item"><span class="legend-dot" style="background-color: #3b82f6;"></span> Published</span>
+                  <span class="chart-legend-item"><span class="legend-dot" style="background-color: #10b981;"></span> Verified</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="platform-bar-distribution" id="platform-distribution-chart">
+                  <!-- LinkedIn -->
+                  <div class="platform-dist-column">
+                    <div class="dist-lollipop-bar">
+                      <div class="lollipop-stem-blue" style="height: 65px;"></div>
+                      <div class="lollipop-dot-blue"></div>
+                      <div class="lollipop-stem-green" style="height: 45px;"></div>
+                      <div class="lollipop-dot-green"></div>
+                    </div>
+                    <div class="platform-dist-meta">
+                      <svg viewBox="0 0 24 24" fill="#0a66c2" class="dist-icon"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.79v8.37H6.46v-8.37M7.86 6.5a1.63 1.63 0 0 0-1.63 1.62 1.63 1.63 0 0 0 1.63 1.63 1.63 1.63 0 0 0 1.63-1.63A1.63 1.63 0 0 0 7.86 6.5Z"/></svg>
+                      <span class="dist-name">LinkedIn</span>
+                      <span class="dist-val" id="dist-count-linkedin">2 posts</span>
+                    </div>
+                  </div>
+
+                  <!-- X (Twitter) -->
+                  <div class="platform-dist-column">
+                    <div class="dist-lollipop-bar">
+                      <div class="lollipop-stem-blue" style="height: 90px;"></div>
+                      <div class="lollipop-dot-blue"></div>
+                      <div class="lollipop-stem-green" style="height: 70px;"></div>
+                      <div class="lollipop-dot-green"></div>
+                    </div>
+                    <div class="platform-dist-meta">
+                      <svg viewBox="0 0 24 24" fill="currentColor" class="dist-icon"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                      <span class="dist-name">X</span>
+                      <span class="dist-val" id="dist-count-twitter">4 posts</span>
+                    </div>
+                  </div>
+
+                  <!-- Facebook -->
+                  <div class="platform-dist-column">
+                    <div class="dist-lollipop-bar">
+                      <div class="lollipop-stem-blue" style="height: 48px;"></div>
+                      <div class="lollipop-dot-blue"></div>
+                      <div class="lollipop-stem-green" style="height: 38px;"></div>
+                      <div class="lollipop-dot-green"></div>
+                    </div>
+                    <div class="platform-dist-meta">
+                      <svg viewBox="0 0 24 24" fill="#1877f2" class="dist-icon"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                      <span class="dist-name">Facebook</span>
+                      <span class="dist-val" id="dist-count-facebook">1 post</span>
+                    </div>
+                  </div>
+
+                  <!-- Instagram -->
+                  <div class="platform-dist-column">
+                    <div class="dist-lollipop-bar">
+                      <div class="lollipop-stem-blue" style="height: 52px;"></div>
+                      <div class="lollipop-dot-blue"></div>
+                      <div class="lollipop-stem-green" style="height: 42px;"></div>
+                      <div class="lollipop-dot-green"></div>
+                    </div>
+                    <div class="platform-dist-meta">
+                      <svg viewBox="0 0 24 24" fill="#e1306c" class="dist-icon"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                      <span class="dist-name">Instagram</span>
+                      <span class="dist-val" id="dist-count-instagram">1 post</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -646,51 +1155,188 @@ What's your strategy? Drop your thoughts below 👇
              8. SETTINGS VIEW
              ================================================================ -->
         <section id="view-settings" class="view-pane">
-          <div class="card" style="margin-bottom: var(--space-6);">
-            <div class="card-header">
-              <div class="card-title"><span>⚙️</span> System Settings & Environment Health</div>
-              <span class="badge badge-emerald">Operational</span>
-            </div>
-            <div class="card-body">
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
-                <div class="form-group">
-                  <span class="form-label">Platform Architecture</span>
-                  <input type="text" class="form-input" value="FastAPI + SQLAlchemy 2.0 + Design Tokens" readonly>
-                </div>
-                <div class="form-group">
-                  <span class="form-label">Token Encryption</span>
-                  <input type="text" class="form-input" value="Fernet (AES-128-CBC + HMAC-SHA256)" readonly>
-                </div>
-                <div class="form-group">
-                  <span class="form-label">Active Database</span>
-                  <input type="text" class="form-input" value="SQLite (Development Mode)" readonly>
-                </div>
-                <div class="form-group">
-                  <span class="form-label">Mock Publishing Simulator</span>
-                  <input type="text" class="form-input" value="Enabled (Zero-Dependency Mode)" readonly>
-                </div>
-              </div>
+          <div class="settings-grid">
 
-              <div class="card-title" style="margin-bottom: var(--space-3); font-size: var(--text-sm);">🔑 API Key & Connector Status</div>
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-3);">
-                <div style="display: flex; justify-content: space-between; padding: var(--space-2) var(--space-3); background: var(--bg-surface-alt); border-radius: var(--radius-sm);">
-                  <span>OpenAI API Key:</span>
-                  <span class="badge badge-indigo">Mock Fallback</span>
+            <!-- Card 1: Core Platform Architecture -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><span>⚙️</span> Platform Architecture & Engine</div>
+                <span class="badge badge-emerald">Operational</span>
+              </div>
+              <div class="card-body settings-prop-card">
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Platform Stack</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">FastAPI + SQLAlchemy 2.0 + Design Tokens</span>
+                    <span class="badge badge-indigo">v1.0.0</span>
+                  </div>
+                  <span class="settings-prop-desc">Asynchronous ASGI backend running with typed Pydantic models.</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: var(--space-2) var(--space-3); background: var(--bg-surface-alt); border-radius: var(--radius-sm);">
-                  <span>Google Gemini:</span>
-                  <span class="badge badge-indigo">Mock Fallback</span>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Token Encryption Engine</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">Fernet (AES-128-CBC + HMAC-SHA256)</span>
+                    <span class="badge badge-cyan">256-bit Key</span>
+                  </div>
+                  <span class="settings-prop-desc">Cryptographically authenticated encryption for OAuth access & refresh tokens.</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: var(--space-2) var(--space-3); background: var(--bg-surface-alt); border-radius: var(--radius-sm);">
-                  <span>Slack Webhook:</span>
-                  <span class="badge badge-emerald">Mock Active</span>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Persistence & Database</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">SQLite 3.x (Development Mode)</span>
+                    <span class="badge badge-emerald">WAL Mode</span>
+                  </div>
+                  <span class="settings-prop-desc">Local relational storage with foreign key constraints and transactional integrity.</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: var(--space-2) var(--space-3); background: var(--bg-surface-alt); border-radius: var(--radius-sm);">
-                  <span>Social OAuth:</span>
-                  <span class="badge badge-emerald">Mock Active</span>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Execution Simulator</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">Mock Publishing (Zero-Dependency Mode)</span>
+                    <span class="badge badge-amber">Sandbox Active</span>
+                  </div>
+                  <span class="settings-prop-desc">Simulates full social API dispatch lifecycle without external API spend or network egress.</span>
                 </div>
               </div>
             </div>
+
+            <!-- Card 2: API Gateway & Connector Status -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><span>🔑</span> API Connectors & Integrations</div>
+                <span class="badge badge-cyan">Mock Fallback</span>
+              </div>
+              <div class="card-body settings-prop-card">
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">LLM Generation Provider</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">OpenAI API Engine (GPT-4o / mini)</span>
+                    <span class="badge badge-indigo">Mock Fallback</span>
+                  </div>
+                  <span class="settings-prop-desc">Autonomous content creation with zero external API billing or token egress.</span>
+                </div>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Multimodal AI Engine</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">Google Gemini 1.5 Pro / Flash</span>
+                    <span class="badge badge-indigo">Mock Fallback</span>
+                  </div>
+                  <span class="settings-prop-desc">Cross-channel tone optimization, engagement scoring, and hashtag evaluation.</span>
+                </div>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">HITL Interactive Alerts</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">Slack Webhook Dispatcher</span>
+                    <span class="badge badge-emerald">Mock Active</span>
+                  </div>
+                  <span class="settings-prop-desc">Real-time Block Kit notifications with approval and revision callback actions.</span>
+                </div>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Channel OAuth Integration</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">X · LinkedIn · Facebook · Instagram</span>
+                    <span class="badge badge-emerald">Mock Active</span>
+                  </div>
+                  <span class="settings-prop-desc">Encrypted token credential store with automated mock delivery simulation.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Security & Isolation Policies -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><span>🛡️</span> Security & Isolation Policies</div>
+                <span class="badge badge-indigo">Academic Compliant</span>
+              </div>
+              <div class="card-body settings-prop-card">
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Zero-Credential In Git Policy</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">Clean Working Tree · Verified Head</span>
+                    <span class="badge badge-emerald">Enforced</span>
+                  </div>
+                  <span class="settings-prop-desc">All secrets, environment files, and SQLite databases are safely gitignored.</span>
+                </div>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Human-in-the-Loop Safeguard</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">Approval Gate & Quality Evaluation</span>
+                    <span class="badge badge-emerald">Active</span>
+                  </div>
+                  <span class="settings-prop-desc">Autonomous posts require human approval prior to dispatch or queue scheduling.</span>
+                </div>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Idempotency & Deduplication</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">SHA-256 Deduplication Hashes</span>
+                    <span class="badge badge-cyan">Enabled</span>
+                  </div>
+                  <span class="settings-prop-desc">Prevents duplicate social publishing and verifies transactional payload locks.</span>
+                </div>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Operator Authentication</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">Role-Based Session Guard</span>
+                    <span class="badge badge-emerald">Authenticated</span>
+                  </div>
+                  <span class="settings-prop-desc">Role-verified operator session protecting administrative controls and settings.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Operational Diagnostics & Telemetry -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><span>📊</span> Operational Diagnostics & Telemetry</div>
+                <span class="badge badge-emerald">105 Tests Passing</span>
+              </div>
+              <div class="card-body settings-prop-card">
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Local Host & Port</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">http://127.0.0.1:8000</span>
+                    <span class="badge badge-emerald">Listening</span>
+                  </div>
+                  <span class="settings-prop-desc">Local development server running on high-performance Uvicorn ASGI loop.</span>
+                </div>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Automated Pytest Suite</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">105 Passed, 0 Failed (100%)</span>
+                    <span class="badge badge-emerald">100% Pass</span>
+                  </div>
+                  <span class="settings-prop-desc">End-to-end API, security, encryption, and scheduler regression test coverage.</span>
+                </div>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Database Connection State</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">SQLite 3.x (Read/Write OK)</span>
+                    <span class="badge badge-emerald">Healthy</span>
+                  </div>
+                  <span class="settings-prop-desc">Active database connection with foreign key constraints fully verified.</span>
+                </div>
+
+                <div class="settings-prop-tile">
+                  <span class="settings-prop-label">Frontend Architecture</span>
+                  <div class="settings-prop-value-row">
+                    <span class="settings-prop-code">Vanilla JS ES6 Modules + Design Tokens</span>
+                    <span class="badge badge-indigo">Zero Build Step</span>
+                  </div>
+                  <span class="settings-prop-desc">Native browser ES modules with zero compilation or bundling overhead.</span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </section>
 
@@ -960,7 +1606,7 @@ What's your strategy? Drop your thoughts below 👇
     <div class="card" style="width: 100%; max-width: 400px; margin: var(--space-4); box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid var(--border-color);">
       <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: var(--space-3);">
         <div class="card-title" style="font-size: 1.1rem; display: flex; align-items: center; gap: var(--space-2);">
-          <span>🔐</span> Operator Sign In
+          <span>🛡️</span> Socio-contentoGen-AI · Operator Sign In
         </div>
       </div>
       <form id="operator-login-form" style="padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-4);">

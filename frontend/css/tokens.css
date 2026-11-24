@@ -64,8 +64,12 @@
   --space-4:  16px;
   --space-5:  20px;
   --space-6:  24px;
+  --space-7:  32px;
   --space-8:  32px;
+  --space-9:  40px;
+  --space-10: 48px;
   --space-12: 48px;
+  --border-color: rgba(255, 255, 255, 0.08);
 
   /* --------------------------------------------------------------------------
      Border Radii
@@ -162,6 +166,7 @@
   --border-subtle:  #e8eaf1;
   --border-strong:  #d3d8e4;
   --border-focus:   #6558e8;
+  --border-color:   #e8eaf1;
 
   --text-primary:   #172033;
   --text-secondary: #64748b;

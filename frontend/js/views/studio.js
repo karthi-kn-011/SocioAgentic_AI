@@ -236,10 +236,10 @@ export function selectPreviewTab(platform) {
   const handleEl = document.getElementById('preview-platform-handle');
   if (handleEl) {
     const handles = {
-      'TWITTER': '@SocialAgentAI • X Post',
-      'LINKEDIN': 'SocialAgent AI • LinkedIn Article Share',
-      'META_FACEBOOK': 'SocialAgent AI • Facebook Post',
-      'META_INSTAGRAM': 'socialagent.ai • Instagram Caption'
+      'TWITTER': '@SocioGenAI • X Post',
+      'LINKEDIN': 'SocioGen AI • LinkedIn Article Share',
+      'META_FACEBOOK': 'SocioGen AI • Facebook Post',
+      'META_INSTAGRAM': 'sociogen.ai • Instagram Caption'
     };
     handleEl.textContent = handles[platform] || platform;
   }

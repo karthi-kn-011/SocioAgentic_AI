@@ -38,6 +38,25 @@ export async function loadAnalyticsData() {
     cachedPublishLogs = publicationLogs;
 
     // Metrics calculation from Analytics Overview
+    // Real Platform Breakdown Data Binding
+    if (overview.platform_breakdown) {
+      const pMap = overview.platform_breakdown;
+      const tw = pMap['TWITTER'] || pMap['X'] || 0;
+      const li = pMap['LINKEDIN'] || 0;
+      const fb = pMap['META_FACEBOOK'] || pMap['FACEBOOK'] || 0;
+      const ig = pMap['META_INSTAGRAM'] || pMap['INSTAGRAM'] || 0;
+
+      const elTw = document.getElementById('dist-count-twitter');
+      const elLi = document.getElementById('dist-count-linkedin');
+      const elFb = document.getElementById('dist-count-facebook');
+      const elIg = document.getElementById('dist-count-instagram');
+
+      if (elTw) elTw.textContent = `${tw} ${tw === 1 ? 'post' : 'posts'}`;
+      if (elLi) elLi.textContent = `${li} ${li === 1 ? 'post' : 'posts'}`;
+      if (elFb) elFb.textContent = `${fb} ${fb === 1 ? 'post' : 'posts'}`;
+      if (elIg) elIg.textContent = `${ig} ${ig === 1 ? 'post' : 'posts'}`;
+    }
+
     const totalPubsEl = document.getElementById('analytics-total-pubs');
     if (totalPubsEl) totalPubsEl.textContent = overview.total_publications;
 

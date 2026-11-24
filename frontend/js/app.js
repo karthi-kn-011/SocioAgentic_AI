@@ -186,6 +186,9 @@ export function switchTab(tabId) {
     if (tabId === 'calendar') {
       initCalendarView();
     }
+    if (tabId === 'accounts' && window.loadAccountsStatus) {
+      window.loadAccountsStatus();
+    }
     if (tabId === 'analytics' && window.loadAnalyticsData) {
       window.loadAnalyticsData();
     }
@@ -317,6 +320,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Re-load current active tab
         if (window.loadDashboardData) window.loadDashboardData();
         if (window.refreshApprovalsList) window.refreshApprovalsList();
+        if (window.loadAccountsStatus) window.loadAccountsStatus();
       } catch (err) {
         showOperatorLoginModal('Network error during authentication.');
       } finally {
@@ -332,5 +336,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (authenticated) {
     if (window.loadDashboardData) window.loadDashboardData();
     if (window.refreshApprovalsList) window.refreshApprovalsList();
+    if (window.loadAccountsStatus) window.loadAccountsStatus();
   }
 });

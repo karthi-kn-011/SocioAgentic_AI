@@ -8,6 +8,7 @@ let activeMessageListener = null;
  * dynamic status querying, and account disconnection.
  */
 export function initAccountsView() {
+  window.loadAccountsStatus = loadAccountsStatus;
   loadAccountsStatus();
 
   document.querySelectorAll('.connect-account-btn').forEach(btn => {
@@ -62,9 +63,9 @@ function updateAccountCardUI(platform, info) {
     btn.classList.add('btn-secondary');
 
     if (statusPill) {
-      statusPill.className = 'badge badge-emerald account-status-pill';
-      const name = info.account_name ? `@${info.account_name}` : 'Connected';
-      statusPill.textContent = `● ACTIVE (${name})`;
+      statusPill.className = 'account-status-pill status-connected';
+      const name = info.account_name ? ` (@${info.account_name})` : '';
+      statusPill.innerHTML = `<span class="status-pulse-dot dot-connected"></span> Connected${name}`;
     }
   } else {
     btn.dataset.action = 'connect';
@@ -73,8 +74,8 @@ function updateAccountCardUI(platform, info) {
     btn.classList.add('btn-primary');
 
     if (statusPill) {
-      statusPill.className = 'badge badge-zinc account-status-pill';
-      statusPill.textContent = '○ NOT CONNECTED';
+      statusPill.className = 'account-status-pill status-disconnected';
+      statusPill.innerHTML = '<span class="status-pulse-dot dot-disconnected"></span> Not Connected';
     }
   }
 }

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="scg-grad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7667f8"/>
+      <stop offset="50%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="scg-glow" x1="12" y1="12" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#c7d2fe" stop-opacity="0.75"/>
+    </linearGradient>
+    <filter id="scg-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#4338ca" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Rounded Shield Container -->
+  <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#scg-grad)" filter="url(#scg-shadow)"/>
+
+  <!-- Network Interconnection Web -->
+  <line x1="13" y1="14" x2="24" y2="24" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <line x1="35" y1="14" x2="24" y2="24" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <line x1="13" y1="34" x2="24" y2="24" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <line x1="35" y1="34" x2="24" y2="24" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <circle cx="24" cy="24" r="14" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1"/>
+
+  <!-- Peripheral Social Network Nodes -->
+  <circle cx="13" cy="14" r="3.2" fill="#ffffff" filter="url(#scg-shadow)"/>
+  <circle cx="35" cy="14" r="3.2" fill="#ffffff" filter="url(#scg-shadow)"/>
+  <circle cx="13" cy="34" r="3.2" fill="#ffffff" filter="url(#scg-shadow)"/>
+  <circle cx="35" cy="34" r="3.2" fill="#ffffff" filter="url(#scg-shadow)"/>
+
+  <!-- Core Content Generation AI Spark -->
+  <path d="M24 12 C24 18, 20 22, 14 24 C20 26, 24 30, 24 36 C24 30, 28 26, 34 24 C28 22, 24 18, 24 12 Z" fill="url(#scg-glow)"/>
+  <circle cx="24" cy="24" r="2.2" fill="#4f46e5"/>
+</svg>
