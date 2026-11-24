@@ -13,6 +13,7 @@ from ..database.crud import log_activity
 from ..services.approval_service import ApprovalService
 from ..services.slack_service import SlackService, get_slack_signing_secret
 from ..config import settings
+from ..auth.security import verify_operator_session
 
 logger = logging.getLogger("SlackRouter")
 
@@ -217,7 +218,8 @@ async def handle_slack_interaction(
 @router.post("/dispatch/{approval_id}")
 def dispatch_slack_approval(
     approval_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    _operator: Dict[str, Any] = Depends(verify_operator_session),
 ):
     """Manually dispatches or re-dispatches a Slack interactive approval card for a post."""
     return SlackService.dispatch_approval_card(db=db, approval_id=approval_id)
@@ -226,7 +228,8 @@ def dispatch_slack_approval(
 @router.get("/preview/{approval_id}")
 def preview_slack_blocks(
     approval_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    _operator: Dict[str, Any] = Depends(verify_operator_session),
 ):
     """Generates and returns the Slack Block Kit payload for an approval request without sending it."""
     approval = db.query(ApprovalRequest).filter(ApprovalRequest.id == approval_id).first()

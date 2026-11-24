@@ -41,12 +41,24 @@ export function formatCardTimestamp(isoStr, preferredTz) {
   }
 }
 
+export function renderUnauthenticatedPlaceholder() {
+  const container = document.getElementById('approvals-list-container');
+  if (container) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: var(--space-8); color: var(--text-muted);">
+        <div style="font-size: 2rem; margin-bottom: var(--space-2);">🔐</div>
+        <div style="font-size: var(--text-base); font-weight: 500; margin-bottom: var(--space-2);">Operator Authentication Required</div>
+        <div style="font-size: var(--text-sm);">Please sign in to view and manage approval requests in the review queue.</div>
+      </div>
+    `;
+  }
+}
+
 /**
  * Approvals & HITL Review View Manager
  */
 export function initApprovalsView() {
   setupFilterTabs();
-  loadApprovals();
 
   // Listen to timezone changes if select exists
   const tzSelect = document.getElementById('calendar-tz-select');
@@ -56,10 +68,20 @@ export function initApprovalsView() {
       renderApprovalCards();
     });
   }
+
+  // Only auto-load approvals if authenticated
+  if (typeof window.isUserAuthenticated === 'function' && !window.isUserAuthenticated()) {
+    renderUnauthenticatedPlaceholder();
+    return;
+  }
+
+  loadApprovals();
 }
 
 export function setupFilterTabs() {
   document.querySelectorAll('.approval-filter-btn').forEach(btn => {
+    if (btn.dataset.bound) return;
+    btn.dataset.bound = 'true';
     btn.addEventListener('click', () => {
       document.querySelectorAll('.approval-filter-btn').forEach(b => {
         b.classList.remove('btn-primary');
@@ -109,9 +131,16 @@ export function getItemStatusBucket(item) {
 /**
  * Loads pending and historical approval requests from the database via REST API.
  */
-export async function loadApprovals() {
+export async function loadApprovals(options = {}) {
+  const isUserInitiated = typeof options === 'boolean' ? options : Boolean(options && (options.isUserInitiated || options.showToast));
   const container = document.getElementById('approvals-list-container');
   if (!container) return;
+
+  // If not authenticated, do not make protected API calls and show unauthenticated placeholder
+  if (typeof window.isUserAuthenticated === 'function' && !window.isUserAuthenticated()) {
+    renderUnauthenticatedPlaceholder();
+    return;
+  }
 
   try {
     const [pendingRes, historyRes] = await Promise.all([
@@ -119,12 +148,23 @@ export async function loadApprovals() {
       fetch('/api/v1/approvals/history')
     ]);
 
+    // Handle 401 Unauthorized cleanly without firing false error toasts
+    if (pendingRes.status === 401 || historyRes.status === 401) {
+      console.warn('Approvals request returned 401 Unauthorized: operator authentication required.');
+      renderUnauthenticatedPlaceholder();
+      return;
+    }
+
     if (!pendingRes.ok) {
       console.warn(`Pending approvals fetch returned status ${pendingRes.status}`);
     }
     if (!historyRes.ok) {
       console.warn(`Approval history fetch returned status ${historyRes.status}`);
       toast.show('Failed to fetch approval history from backend.', 'error');
+    }
+
+    if (pendingRes.ok && historyRes.ok && isUserInitiated) {
+      toast.show('Approvals queue refreshed', 'info');
     }
 
     const pending = pendingRes.ok ? await pendingRes.json() : [];
@@ -147,6 +187,7 @@ export async function loadApprovals() {
     }
 
     allApprovalItems = uniqueItems;
+    window.allApprovalItems = allApprovalItems;
 
     // Compute mutually exclusive bucket counts
     const counts = {
@@ -908,6 +949,7 @@ window.confirmRejection = confirmRejection;
 window.regenerateApproval = regenerateApproval;
 window.refreshApprovalsList = loadApprovals;
 window.loadApprovals = loadApprovals;
+window.handleUserRefreshApprovals = () => loadApprovals(true);
 window.openScheduleModal = openScheduleModal;
 window.closeScheduleModal = closeScheduleModal;
 window.confirmSchedule = confirmSchedule;

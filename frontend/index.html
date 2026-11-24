@@ -91,6 +91,10 @@
           <span id="system-health-pill" class="badge badge-amber">🟡 Connecting...</span>
           <button class="btn btn-secondary btn-sm" onclick="checkBackendHealth()">🔄 Refresh</button>
           <button class="btn btn-primary btn-sm" onclick="switchTab('studio')">✨ New Post</button>
+          <div id="operator-session-controls" style="display: flex; align-items: center; gap: var(--space-2); margin-left: var(--space-2);">
+            <span id="operator-session-badge" class="badge badge-indigo" style="display: none;">👤 <span id="operator-name-display">Operator</span></span>
+            <button id="operator-logout-btn" class="btn btn-secondary btn-sm" style="display: none;" onclick="window.handleOperatorLogout && window.handleOperatorLogout()">Sign Out</button>
+          </div>
         </div>
       </header>
 
@@ -143,10 +147,11 @@
             <!-- Quality Meter -->
             <div class="card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
               <div class="card-title" style="margin-bottom: var(--space-3);">Average AI Quality Score</div>
-              <div style="font-size: 3.5rem; font-weight: 800; background: var(--gradient-brand); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: var(--space-2) 0;">
-                88%
+              <div id="dashboard-ai-quality" style="font-size: 3.5rem; font-weight: 800; background: var(--gradient-brand); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: var(--space-2) 0;">
+                --%
               </div>
-              <span class="badge badge-emerald" style="margin-bottom: var(--space-3);">PASSED SAFETY & TONE AUDIT</span>
+              <span id="dashboard-ai-badge" class="badge badge-emerald" style="margin-bottom: var(--space-3);">PASSED SAFETY & TONE AUDIT</span>
+
               <p style="font-size: var(--text-xs); color: var(--text-muted); max-width: 260px;">
                 Evaluated across platform character limits, brand voice, engagement hooks, and compliance criteria.
               </p>
@@ -342,7 +347,7 @@ What's your strategy? Drop your thoughts below 👇
               <button class="btn btn-secondary btn-sm approval-filter-btn" data-filter="rejected">❌ Rejected</button>
               <button class="btn btn-secondary btn-sm approval-filter-btn" data-filter="published">🚀 Published</button>
             </div>
-            <button class="btn btn-secondary btn-sm" onclick="window.refreshApprovalsList ? (window.refreshApprovalsList(), toast.show('Approvals queue refreshed', 'info')) : toast.show('Approvals queue refreshed', 'info')">🔄 Refresh Queue</button>
+            <button class="btn btn-secondary btn-sm" onclick="window.handleUserRefreshApprovals ? window.handleUserRefreshApprovals() : (window.refreshApprovalsList && window.refreshApprovalsList(true))">🔄 Refresh Queue</button>
           </div>
 
           <!-- Dynamic Approvals List Container -->
@@ -534,9 +539,10 @@ What's your strategy? Drop your thoughts below 👇
             </div>
             <div class="stat-card">
               <span class="stat-label">Average AI Quality</span>
-              <div class="stat-value" style="color: #818cf8;">88%</div>
-              <span class="badge badge-indigo">Audited</span>
+              <div class="stat-value" style="color: #818cf8;" id="analytics-ai-quality">-</div>
+              <span class="badge badge-indigo" id="analytics-ai-badge">Audited</span>
             </div>
+
           </div>
 
           <!-- Authentic Metrics Guardrail Banner -->
@@ -619,9 +625,18 @@ What's your strategy? Drop your thoughts below 👇
                   </tbody>
                 </table>
               </div>
+
+              <div id="activity-pagination" style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--border-color); font-size: var(--text-xs); color: var(--text-muted);">
+                <span id="activity-page-info">Showing 0-0 of 0 events</span>
+                <div style="display: flex; gap: var(--space-2);">
+                  <button class="btn btn-secondary btn-sm" id="activity-prev-btn" disabled>◀ Previous</button>
+                  <button class="btn btn-secondary btn-sm" id="activity-next-btn" disabled>Next ▶</button>
+                </div>
+              </div>
             </div>
           </div>
         </section>
+
 
         <!-- ================================================================
              8. SETTINGS VIEW
@@ -935,6 +950,31 @@ What's your strategy? Drop your thoughts below 👇
 
   <!-- Backwards Compatibility Fallback (hidden) -->
   <div class="modal-backdrop" id="post-details-modal" style="display: none;"></div>
+
+  <!-- Operator Authentication Modal -->
+  <div id="operator-login-modal" class="modal-backdrop" style="display: none; align-items: center; justify-content: center; z-index: 9999;">
+    <div class="card" style="width: 100%; max-width: 400px; margin: var(--space-4); box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid var(--border-color);">
+      <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: var(--space-3);">
+        <div class="card-title" style="font-size: 1.1rem; display: flex; align-items: center; gap: var(--space-2);">
+          <span>🔐</span> Operator Sign In
+        </div>
+      </div>
+      <form id="operator-login-form" style="padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-4);">
+        <div id="login-error-alert" class="alert alert-danger" style="display: none; font-size: var(--text-xs); padding: 8px 12px;"></div>
+        <div class="form-group">
+          <label class="form-label" for="login-username">Operator Username</label>
+          <input type="text" id="login-username" class="form-input" required autocomplete="username" placeholder="Username" autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Operator Password</label>
+          <input type="password" id="login-password" class="form-input" required autocomplete="current-password" placeholder="Password">
+        </div>
+        <button type="submit" id="login-submit-btn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 10px;">
+          Authenticate
+        </button>
+      </form>
+    </div>
+  </div>
 
   <!-- Toast Notification Container -->
 

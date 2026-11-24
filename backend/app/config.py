@@ -8,6 +8,8 @@ logger = logging.getLogger("SocialAgentConfig")
 
 DEV_DEFAULT_FERNET = "k8zZ01Ua9qL_Wc4z7d_YxG8jB2nF6mP0rT3vA5eC7sI="
 DEV_DEFAULT_SECRET = "dev_secret_key_change_in_production_min_32_chars!"
+DEV_DEFAULT_OPERATOR_USER = "operator"
+DEV_DEFAULT_OPERATOR_PASS = "DevSecurePassword2026!"
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -29,6 +31,13 @@ class Settings(BaseSettings):
     # Security & Encryption
     SECRET_KEY: str = DEV_DEFAULT_SECRET
     FERNET_KEY: str = DEV_DEFAULT_FERNET
+
+    # Operator Authentication & Access Control
+    OPERATOR_USERNAME: str = DEV_DEFAULT_OPERATOR_USER
+    OPERATOR_PASSWORD: str = DEV_DEFAULT_OPERATOR_PASS
+    API_KEY: Optional[str] = None
+    SESSION_MAX_AGE_SECONDS: int = 43200  # 12 hours
+    ALLOWED_ORIGINS: str = "http://localhost:8000,http://127.0.0.1:8000"
 
     # Mock & Sandbox Modes
     MOCK_SOCIAL_PUBLISHING: bool = True
@@ -113,13 +122,40 @@ class Settings(BaseSettings):
             return "mock"
         return "mock"
 
+    @property
+    def allowed_origins_list(self) -> list[str]:
+        """Parses comma-separated ALLOWED_ORIGINS into a clean, normalized list."""
+        origins = [o.strip().rstrip("/") for o in self.ALLOWED_ORIGINS.split(",") if o.strip()]
+        if self.FRONTEND_ORIGIN:
+            fe = self.FRONTEND_ORIGIN.strip().rstrip("/")
+            if fe and fe not in origins:
+                origins.append(fe)
+        return origins
+
     def validate_production_security(self):
-        """Guardrail checking that default development keys are not used in production."""
+        """Guardrail checking that default development keys and credentials are not used in production."""
         if self.is_production:
-            if self.FERNET_KEY == DEV_DEFAULT_FERNET:
-                raise ValueError("SECURITY ALERT: Cannot use default DEV FERNET_KEY in production mode!")
-            if self.SECRET_KEY == DEV_DEFAULT_SECRET or len(self.SECRET_KEY) < 32:
-                raise ValueError("SECURITY ALERT: Cannot use default or short SECRET_KEY in production mode!")
+            if not self.FERNET_KEY or self.FERNET_KEY == DEV_DEFAULT_FERNET:
+                raise ValueError("SECURITY ALERT: Cannot use default or empty FERNET_KEY in production mode!")
+            try:
+                from cryptography.fernet import Fernet
+                Fernet(self.FERNET_KEY.encode("utf-8") if isinstance(self.FERNET_KEY, str) else self.FERNET_KEY)
+            except Exception as e:
+                raise ValueError(f"SECURITY ALERT: Invalid persistent FERNET_KEY format in production: {e}")
+
+            if not self.SECRET_KEY or self.SECRET_KEY == DEV_DEFAULT_SECRET or len(self.SECRET_KEY) < 32:
+                raise ValueError("SECURITY ALERT: Cannot use default or short SECRET_KEY (min 32 chars) in production mode!")
+
+            if (
+                not self.OPERATOR_USERNAME
+                or self.OPERATOR_USERNAME == DEV_DEFAULT_OPERATOR_USER
+                or not self.OPERATOR_PASSWORD
+                or self.OPERATOR_PASSWORD == DEV_DEFAULT_OPERATOR_PASS
+                or len(self.OPERATOR_PASSWORD) < 12
+            ):
+                raise ValueError(
+                    "SECURITY ALERT: Production requires non-default OPERATOR_USERNAME and strong OPERATOR_PASSWORD (min 12 chars)!"
+                )
 
 settings = Settings()
 

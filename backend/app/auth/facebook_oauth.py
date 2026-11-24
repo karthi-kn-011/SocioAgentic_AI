@@ -76,10 +76,10 @@ class FacebookOAuthService:
             with httpx.Client(timeout=15.0) as client:
                 resp = client.get(FACEBOOK_TOKEN_URL, params=params)
                 if resp.status_code != 200:
-                    logger.error("Meta token exchange failed (%s): %s", resp.status_code, resp.text)
+                    logger.error("Meta token exchange failed with HTTP status %s", resp.status_code)
                     raise HTTPException(
                         status_code=400,
-                        detail=f"Failed to exchange authorization code with Meta: {resp.text}"
+                        detail="Failed to exchange authorization code with Meta. Provider returned an error."
                     )
                 return resp.json()
         except httpx.RequestError as exc:

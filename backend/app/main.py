@@ -1,7 +1,7 @@
 import os
 import logging
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -9,9 +9,21 @@ from fastapi.exceptions import RequestValidationError
 
 from .config import settings
 from .database.database import init_db
-from .routers import health_router, posts_router, approvals_router, schedules_router, auth_router, slack_router
-from .schemas.common import ErrorResponse
+from .auth.security import verify_operator_session
+from .routers import (
+    health_router,
+    posts_router,
+    approvals_router,
+    schedules_router,
+    auth_router,
+    slack_router,
+    analytics_router,
+    activity_router,
+)
 from .scheduler import start_scheduler, stop_scheduler
+from .schemas.common import ErrorResponse
+
+
 
 # Configure structured logging
 logging.basicConfig(
@@ -39,10 +51,10 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS configuration
+# CORS configuration - Restrict to explicit allowed origins with credentials
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.allowed_origins_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -76,17 +88,26 @@ async def generic_exception_handler(request: Request, exc: Exception):
         ).model_dump()
     )
 
-# Include API Routers under /api/v1
+# Include API Routers with appropriate authorization boundaries
+# Public / Webhook Routers:
 app.include_router(health_router, prefix="/api/v1")
-app.include_router(posts_router, prefix="/api/v1")
-app.include_router(approvals_router, prefix="/api/v1")
-app.include_router(approvals_router, prefix="/api")  # Unversioned compatibility mount
-app.include_router(schedules_router, prefix="/api/v1")
-app.include_router(schedules_router, prefix="/api")  # Unversioned compatibility mount
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(auth_router, prefix="/api")  # Unversioned compatibility mount
 app.include_router(slack_router, prefix="/api/v1")
 app.include_router(slack_router, prefix="/api")  # Unversioned compatibility mount
+
+# Protected Operational Routers:
+app.include_router(posts_router, prefix="/api/v1", dependencies=[Depends(verify_operator_session)])
+app.include_router(approvals_router, prefix="/api/v1", dependencies=[Depends(verify_operator_session)])
+app.include_router(approvals_router, prefix="/api", dependencies=[Depends(verify_operator_session)])
+app.include_router(schedules_router, prefix="/api/v1", dependencies=[Depends(verify_operator_session)])
+app.include_router(schedules_router, prefix="/api", dependencies=[Depends(verify_operator_session)])
+app.include_router(analytics_router, prefix="/api/v1", dependencies=[Depends(verify_operator_session)])
+app.include_router(analytics_router, prefix="/api", dependencies=[Depends(verify_operator_session)])
+app.include_router(activity_router, prefix="/api/v1", dependencies=[Depends(verify_operator_session)])
+app.include_router(activity_router, prefix="/api", dependencies=[Depends(verify_operator_session)])
+
+
 
 # Mount Static Frontend
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend"))

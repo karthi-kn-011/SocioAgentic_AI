@@ -2,7 +2,7 @@ import json
 import logging
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any, List
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 
@@ -14,10 +14,104 @@ from backend.app.auth.twitter_oauth import TwitterOAuthService
 from backend.app.auth.linkedin_oauth import LinkedInOAuthService
 from backend.app.auth.facebook_oauth import FacebookOAuthService
 from backend.app.auth.instagram_oauth import InstagramOAuthService
+from backend.app.auth.security import (
+    create_session_token,
+    verify_session_token,
+    generate_csrf_token,
+    check_login_rate_limit,
+    record_failed_login,
+    clear_failed_logins,
+    verify_operator_session,
+    SESSION_COOKIE_NAME,
+    CSRF_COOKIE_NAME,
+)
+from pydantic import BaseModel
+import hmac
 
 logger = logging.getLogger("AuthRouter")
 
 router = APIRouter(prefix="/auth", tags=["Authentication & Social Accounts"])
+
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
+@router.post("/login")
+def login_operator(req: LoginRequest, request: Request, response: Response) -> Dict[str, Any]:
+    """Authenticates operator credentials, issuing an HttpOnly session cookie and CSRF token."""
+    settings = get_settings()
+    client_ip = request.client.host if request.client else "127.0.0.1"
+
+    check_login_rate_limit(client_ip)
+
+    is_user_valid = hmac.compare_digest(req.username.strip(), settings.OPERATOR_USERNAME)
+    is_pass_valid = hmac.compare_digest(req.password, settings.OPERATOR_PASSWORD)
+
+    if not (is_user_valid and is_pass_valid):
+        record_failed_login(client_ip)
+        logger.warning("Failed login attempt for user '%s' from IP %s", req.username, client_ip)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid operator credentials."
+        )
+
+    clear_failed_logins(client_ip)
+
+    session_token = create_session_token(username=settings.OPERATOR_USERNAME)
+    csrf_token = generate_csrf_token()
+
+    # HttpOnly session cookie
+    response.set_cookie(
+        key=SESSION_COOKIE_NAME,
+        value=session_token,
+        max_age=settings.SESSION_MAX_AGE_SECONDS,
+        httponly=True,
+        samesite="lax",
+        secure=settings.is_production,
+        path="/",
+    )
+    # Readable CSRF cookie for client header attachment
+    response.set_cookie(
+        key=CSRF_COOKIE_NAME,
+        value=csrf_token,
+        max_age=settings.SESSION_MAX_AGE_SECONDS,
+        httponly=False,
+        samesite="lax",
+        secure=settings.is_production,
+        path="/",
+    )
+
+    logger.info("Operator '%s' successfully signed in from %s", settings.OPERATOR_USERNAME, client_ip)
+    return {
+        "success": True,
+        "message": "Operator signed in successfully.",
+        "user": settings.OPERATOR_USERNAME,
+        "csrf_token": csrf_token,
+    }
+
+
+@router.post("/logout")
+def logout_operator(response: Response) -> Dict[str, Any]:
+    """Clears operator session and CSRF cookies."""
+    response.delete_cookie(key=SESSION_COOKIE_NAME, path="/")
+    response.delete_cookie(key=CSRF_COOKIE_NAME, path="/")
+    return {"success": True, "message": "Operator signed out successfully."}
+
+
+@router.get("/session")
+def get_session_status(request: Request) -> Dict[str, Any]:
+    """Checks whether the client possesses a valid active operator session."""
+    session_cookie = request.cookies.get(SESSION_COOKIE_NAME)
+    if not session_cookie:
+        return {"authenticated": False, "user": None}
+
+    payload = verify_session_token(session_cookie)
+    if not payload:
+        return {"authenticated": False, "user": None}
+
+    return {"authenticated": True, "user": payload.get("sub")}
 
 
 @router.get("/accounts")
@@ -49,7 +143,10 @@ def get_connected_accounts(db: Session = Depends(get_db)) -> Dict[str, Any]:
 
 
 @router.get("/twitter/authorize")
-def twitter_authorize(db: Session = Depends(get_db)) -> Dict[str, str]:
+def twitter_authorize(
+    db: Session = Depends(get_db),
+    _operator: Dict[str, Any] = Depends(verify_operator_session),
+) -> Dict[str, str]:
     """Generates PKCE challenge and returns the X (Twitter) OAuth 2.0 authorization URL."""
     settings = get_settings()
     code_verifier, code_challenge = OAuthService.generate_pkce_pair()
@@ -220,7 +317,10 @@ def twitter_callback(
 
 
 @router.post("/twitter/disconnect")
-def twitter_disconnect(db: Session = Depends(get_db)) -> Dict[str, Any]:
+def twitter_disconnect(
+    db: Session = Depends(get_db),
+    _operator: Dict[str, Any] = Depends(verify_operator_session),
+) -> Dict[str, Any]:
     """Disconnects X (Twitter) account, revokes and wipes tokens, and logs the action."""
     account = db.query(SocialAccount).filter(SocialAccount.platform == PlatformType.TWITTER).first()
     if not account or not account.is_active:
@@ -248,7 +348,10 @@ def twitter_disconnect(db: Session = Depends(get_db)) -> Dict[str, Any]:
  
  
 @router.get("/linkedin/authorize")
-def linkedin_authorize(db: Session = Depends(get_db)) -> Dict[str, str]:
+def linkedin_authorize(
+    db: Session = Depends(get_db),
+    _operator: Dict[str, Any] = Depends(verify_operator_session),
+) -> Dict[str, str]:
     """Generates state and returns the LinkedIn OAuth 2.0 authorization URL."""
     settings = get_settings()
 
@@ -351,7 +454,10 @@ def linkedin_callback(
 
 
 @router.post("/linkedin/disconnect")
-def linkedin_disconnect(db: Session = Depends(get_db)) -> Dict[str, Any]:
+def linkedin_disconnect(
+    db: Session = Depends(get_db),
+    _operator: Dict[str, Any] = Depends(verify_operator_session),
+) -> Dict[str, Any]:
     """Disconnects LinkedIn account, wipes stored encrypted tokens, and logs the action."""
     account = db.query(SocialAccount).filter(SocialAccount.platform == PlatformType.LINKEDIN).first()
     if not account or not account.is_active:
@@ -370,7 +476,10 @@ def linkedin_disconnect(db: Session = Depends(get_db)) -> Dict[str, Any]:
  
  
 @router.get("/facebook/authorize")
-def facebook_authorize(db: Session = Depends(get_db)) -> Dict[str, str]:
+def facebook_authorize(
+    db: Session = Depends(get_db),
+    _operator: Dict[str, Any] = Depends(verify_operator_session),
+) -> Dict[str, str]:
     """Generates state and returns the Meta Facebook Page OAuth 2.0 authorization URL."""
     settings = get_settings()
 
@@ -491,7 +600,10 @@ def facebook_callback(
 
 
 @router.post("/facebook/disconnect")
-def facebook_disconnect(db: Session = Depends(get_db)) -> Dict[str, Any]:
+def facebook_disconnect(
+    db: Session = Depends(get_db),
+    _operator: Dict[str, Any] = Depends(verify_operator_session),
+) -> Dict[str, Any]:
     """Disconnects Facebook Page, wipes stored encrypted Page tokens, and logs the action."""
     account = db.query(SocialAccount).filter(SocialAccount.platform == PlatformType.META_FACEBOOK).first()
     if not account or not account.is_active:
@@ -510,7 +622,10 @@ def facebook_disconnect(db: Session = Depends(get_db)) -> Dict[str, Any]:
  
  
 @router.get("/instagram/authorize")
-def instagram_authorize(db: Session = Depends(get_db)) -> Dict[str, str]:
+def instagram_authorize(
+    db: Session = Depends(get_db),
+    _operator: Dict[str, Any] = Depends(verify_operator_session),
+) -> Dict[str, str]:
     """Generates state and returns the Meta Instagram Business OAuth 2.0 authorization URL."""
     settings = get_settings()
 
@@ -645,7 +760,10 @@ def instagram_callback(
 
 
 @router.post("/instagram/disconnect")
-def instagram_disconnect(db: Session = Depends(get_db)) -> Dict[str, Any]:
+def instagram_disconnect(
+    db: Session = Depends(get_db),
+    _operator: Dict[str, Any] = Depends(verify_operator_session),
+) -> Dict[str, Any]:
     """Disconnects Instagram Business account, wipes stored encrypted tokens, and logs the action."""
     account = db.query(SocialAccount).filter(SocialAccount.platform == PlatformType.META_INSTAGRAM).first()
     if not account or not account.is_active:

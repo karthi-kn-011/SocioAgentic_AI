@@ -21,13 +21,13 @@ class FacebookPublisher(BasePublisher):
     strictly to MockPublisher to prevent accidental live publication.
     """
 
-    def publish(self, post: Any, scheduled_post: Optional[Any] = None) -> PublishResult:
+    def publish(self, post: Any, scheduled_post: Optional[Any] = None, db: Optional[Session] = None) -> PublishResult:
         settings = get_settings()
 
         # Strict Mock Mode Guardrail
         if settings.MOCK_SOCIAL_PUBLISHING:
             logger.info("MOCK_SOCIAL_PUBLISHING is True; delegating Facebook publication to MockPublisher.")
-            return MockPublisher().publish(post=post, scheduled_post=scheduled_post)
+            return MockPublisher().publish(post=post, scheduled_post=scheduled_post, db=db)
 
         # Extract platform content
         content = None
@@ -49,7 +49,10 @@ class FacebookPublisher(BasePublisher):
             )
 
         # Retrieve connected Facebook Page account
-        db: Session = SessionLocal()
+        db_created = False
+        if db is None:
+            db = SessionLocal()
+            db_created = True
         try:
             account = db.query(SocialAccount).filter(
                 SocialAccount.platform == PlatformType.META_FACEBOOK,
@@ -140,4 +143,5 @@ class FacebookPublisher(BasePublisher):
                     error_message=f"Network error communicating with Meta Graph API: {str(exc)}",
                 )
         finally:
-            db.close()
+            if db_created:
+                db.close()

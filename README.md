@@ -107,19 +107,34 @@ Open your browser to:
 - **Interactive Swagger Docs:** `http://localhost:8000/docs`
 - **ReDoc:** `http://localhost:8000/redoc`
 
+#### Operator Authentication (Phase 9 Security Hardening)
+The web interface is protected by signed HttpOnly operator sessions and CSRF tokens:
+- **Development Username:** `operator`
+- **Development Password:** `DevSecurePassword2026!`
+*(In production, custom credentials must be configured via `OPERATOR_USERNAME` and `OPERATOR_PASSWORD` in `.env`)*
+
 ---
 
 ## 3. Running Automated Tests
 
-All tests run in **strict isolation** against temporary SQLite databases (`test_phase7_temp.db`, etc.) with automated assertions ensuring the active `social_agent.db` database is never touched. External network calls are mocked.
+All tests run in **strict isolation** against temporary SQLite databases with automated assertions ensuring the active `social_agent.db` database is never touched. External network calls are mocked.
 
-Run the entire 81-test verification suite:
+Run the entire 105-test verification suite:
 ```powershell
 python -m pytest tests/ -v
 ```
 
 Run specific test modules:
 ```powershell
+# Phase 9 Security Hardening & Session Auth
+python -m pytest tests/test_phase9_security.py -v
+
+# Phase 9 Database & Process Isolation
+python -m pytest tests/test_phase9_isolation.py -v
+
+# Phase 8 Analytics & Audit Logs
+python -m pytest tests/test_analytics_and_activity.py -v
+
 # OAuth PKCE & X (Twitter) infrastructure
 python -m pytest tests/test_oauth_infrastructure.py -v
 

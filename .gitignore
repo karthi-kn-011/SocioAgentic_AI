@@ -6,7 +6,10 @@ __pycache__/
 
 # Environments & Virtual Envs
 .env
+.env.*
+!.env.example
 .venv
+.venv/
 env/
 venv/
 ENV/
@@ -19,14 +22,26 @@ social_agent.db
 social_agent_checkpoints.db
 test_*.db
 
+# Database Backups & Snapshots
+*.db.backup_*
+social_agent_backup_*.db
+social_agent_pre_selective_cleanup_*.db
+*.backup
+*.bak
+
 # Testing & Coverage
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Logs
+# Logs & Temporary Artifacts
 *.log
 logs/
+scratch/
+*.tmp
+*.temp
+0]
+1]
 
 # IDE & OS Files
 .idea/
@@ -40,3 +55,7 @@ Thumbs.db
 node_modules/
 dist/
 .cache/
+
+# Local Distribution Archives
+ICT_SUBMISSION/
+ICT_SUBMISSION.zip

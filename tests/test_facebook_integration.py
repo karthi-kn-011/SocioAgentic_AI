@@ -34,6 +34,7 @@ def setup_test_database():
     Base.metadata.create_all(bind=test_engine)
     yield
     Base.metadata.drop_all(bind=test_engine)
+    test_engine.dispose()
     if os.path.exists(TEST_DB_FILE):
         try:
             os.remove(TEST_DB_FILE)
@@ -65,7 +66,7 @@ def client(db_session):
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as test_client:
         yield test_client
-    app.dependency_overrides.clear()
+    app.dependency_overrides.pop(get_db, None)
 
 
 # =========================================================================

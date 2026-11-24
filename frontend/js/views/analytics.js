@@ -3,7 +3,7 @@ import { toast } from '../components/toast.js';
 let cachedPublishLogs = [];
 
 /**
- * Analytics View Manager (Data-Driven from Backend Schedules & Publication Logs)
+ * Analytics View Manager (Data-Driven from Backend Analytics Service)
  */
 export async function initAnalyticsView() {
   const exportBtn = document.getElementById('export-analytics-btn');
@@ -14,51 +14,74 @@ export async function initAnalyticsView() {
     });
   }
 
+  if (typeof window.isUserAuthenticated === 'function' && !window.isUserAuthenticated()) {
+    return;
+  }
+
   await loadAnalyticsData();
 }
 
 export async function loadAnalyticsData() {
   const tbody = document.getElementById('analytics-table-body');
   try {
-    const res = await fetch('/api/v1/schedules');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    const schedules = data.data || [];
+    const [overviewRes, pubsRes] = await Promise.all([
+      fetch('/api/v1/analytics/overview'),
+      fetch('/api/v1/analytics/publications?limit=100'),
+    ]);
 
-    // Filter to schedules that have had execution attempts (PUBLISHED or PUBLISH_FAILED)
-    const executed = schedules.filter(s => s.status === 'PUBLISHED' || s.status === 'PUBLISH_FAILED');
-    const successful = executed.filter(s => s.status === 'PUBLISHED');
-    const failed = executed.filter(s => s.status === 'PUBLISH_FAILED');
+    if (!overviewRes.ok) throw new Error(`Overview HTTP ${overviewRes.status}`);
+    if (!pubsRes.ok) throw new Error(`Publications HTTP ${pubsRes.status}`);
 
-    cachedPublishLogs = executed;
+    const overview = await overviewRes.json();
+    const pubsData = await pubsRes.json();
+    const publicationLogs = pubsData.items || [];
+    cachedPublishLogs = publicationLogs;
 
-    // Metrics calculation
+    // Metrics calculation from Analytics Overview
     const totalPubsEl = document.getElementById('analytics-total-pubs');
-    if (totalPubsEl) totalPubsEl.textContent = executed.length;
+    if (totalPubsEl) totalPubsEl.textContent = overview.total_publications;
 
     const successRateEl = document.getElementById('analytics-success-rate');
     const successBadgeEl = document.getElementById('analytics-success-badge');
     if (successRateEl) {
-      if (executed.length === 0) {
+      if (overview.total_publications === 0) {
         successRateEl.textContent = 'N/A';
         if (successBadgeEl) successBadgeEl.textContent = 'No Attempts Yet';
       } else {
-        const rate = Math.round((successful.length / executed.length) * 100);
-        successRateEl.textContent = `${rate}%`;
-        if (successBadgeEl) successBadgeEl.textContent = `${successful.length} Dispatched`;
+        successRateEl.textContent = `${overview.success_rate}%`;
+        if (successBadgeEl) successBadgeEl.textContent = `${overview.successful_publications} Delivered`;
       }
     }
 
     const failedEl = document.getElementById('analytics-failed-pubs');
     const failBadgeEl = document.getElementById('analytics-failure-badge');
     if (failedEl) {
-      failedEl.textContent = failed.length;
+      failedEl.textContent = overview.failed_publications;
       if (failBadgeEl) {
-        failBadgeEl.textContent = failed.length === 0 ? 'Healthy (0 Errors)' : `${failed.length} Errors`;
+        failBadgeEl.textContent = overview.failed_publications === 0 ? 'Healthy (0 Errors)' : `${overview.failed_publications} Errors`;
       }
     }
 
-    renderAnalyticsTable(executed);
+    // Dynamic Average AI Quality
+    const aiQualityEl = document.getElementById('analytics-ai-quality');
+    const aiQualityBadge = document.getElementById('analytics-ai-badge');
+    if (aiQualityEl) {
+      if (overview.average_ai_score !== null && overview.average_ai_score !== undefined) {
+        aiQualityEl.textContent = `${overview.average_ai_score}%`;
+        if (aiQualityBadge) {
+          aiQualityBadge.textContent = 'Audited';
+          aiQualityBadge.className = 'badge badge-indigo';
+        }
+      } else {
+        aiQualityEl.textContent = 'N/A';
+        if (aiQualityBadge) {
+          aiQualityBadge.textContent = 'No Data';
+          aiQualityBadge.className = 'badge badge-gray';
+        }
+      }
+    }
+
+    renderAnalyticsTable(publicationLogs);
   } catch (err) {
     console.warn('Failed to load analytics data:', err);
     if (tbody) {
@@ -91,17 +114,24 @@ function renderAnalyticsTable(logs) {
   }
 
   tbody.innerHTML = logs.map(item => {
-    const isSuccess = item.status === 'PUBLISHED';
+    const isSuccess = item.status === 'SUCCESS' || item.status === 'SIMULATED';
     const badgeClass = isSuccess ? 'badge-emerald' : 'badge-danger';
-    const timeFormatted = item.published_at ? new Date(item.published_at).toLocaleString() : (item.scheduled_at ? new Date(item.scheduled_at).toLocaleString() : 'N/A');
+    const timeFormatted = item.published_at
+      ? new Date(item.published_at).toLocaleString()
+      : (item.attempted_at ? new Date(item.attempted_at).toLocaleString() : 'N/A');
+
+    const scheduleLabel = item.schedule_id ? `#${item.schedule_id} (Post #${item.post_id})` : `#${item.id} (Post #${item.post_id})`;
+    const modeBadge = item.is_mock
+      ? '<span class="badge badge-cyan" style="font-size: 10px;">SIMULATED (Sandbox)</span>'
+      : '<span class="badge badge-emerald" style="font-size: 10px;">LIVE (Production)</span>';
 
     return `
       <tr>
-        <td>#${item.id}</td>
+        <td>${escapeHtml(scheduleLabel)}</td>
         <td><span class="badge badge-indigo">${escapeHtml(item.platform || 'Social')}</span></td>
         <td><span class="badge ${badgeClass}">${escapeHtml(item.status)}</span></td>
-        <td><span class="badge badge-cyan" style="font-size: 10px;">SIMULATED (Sandbox)</span></td>
-        <td><code style="font-family: var(--font-mono); font-size: 11px;">${item.idempotency_key ? escapeHtml(item.idempotency_key.slice(0, 18)) : 'id_simulated'}</code></td>
+        <td>${modeBadge}</td>
+        <td><code style="font-family: var(--font-mono); font-size: 11px;">${item.external_post_id ? escapeHtml(item.external_post_id.slice(0, 22)) : (item.is_mock ? 'id_simulated' : '-')}</code></td>
         <td style="font-size: var(--text-xs);">${timeFormatted}</td>
       </tr>
     `;
@@ -114,9 +144,10 @@ function exportPublicationLogsCSV() {
     return;
   }
 
-  let csvContent = "data:text/csv;charset=utf-8,Schedule_ID,Post_ID,Platform,Status,Scheduled_At,Published_At\n";
-  cachedPublishLogs.forEach(s => {
-    csvContent += `${s.id},${s.post_id || ''},${s.platform || ''},${s.status || ''},${s.scheduled_at || ''},${s.published_at || ''}\n`;
+  let csvContent = "data:text/csv;charset=utf-8,Log_ID,Post_ID,Schedule_ID,Platform,Status,Execution_Mode,External_ID,Attempted_At,Published_At\n";
+  cachedPublishLogs.forEach(l => {
+    const mode = l.is_mock ? 'MOCK' : 'LIVE';
+    csvContent += `${l.id},${l.post_id || ''},${l.schedule_id || ''},${l.platform || ''},${l.status || ''},${mode},${l.external_post_id || ''},${l.attempted_at || ''},${l.published_at || ''}\n`;
   });
 
   const encodedUri = encodeURI(csvContent);

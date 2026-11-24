@@ -14,17 +14,22 @@ export async function initDashboardView() {
     });
   }
 
+  if (typeof window.isUserAuthenticated === 'function' && !window.isUserAuthenticated()) {
+    return;
+  }
+
   await loadDashboardData();
 }
 
 export async function loadDashboardData() {
   try {
-    const [postsRes, pendingRes, historyRes, schedsRes, activityRes] = await Promise.all([
+    const [postsRes, pendingRes, historyRes, schedsRes, activityRes, analyticsRes] = await Promise.all([
       fetch('/api/v1/posts?limit=100').catch(() => null),
       fetch('/api/v1/approvals/pending').catch(() => null),
       fetch('/api/v1/approvals/history').catch(() => null),
       fetch('/api/v1/schedules').catch(() => null),
-      fetch('/api/v1/health/activity?limit=5').catch(() => null),
+      fetch('/api/v1/activity?limit=5').catch(() => fetch('/api/v1/health/activity?limit=5').catch(() => null)),
+      fetch('/api/v1/analytics/overview').catch(() => null),
     ]);
 
     const posts = postsRes && postsRes.ok ? await postsRes.json() : [];
@@ -32,7 +37,9 @@ export async function loadDashboardData() {
     const history = historyRes && historyRes.ok ? await historyRes.json() : [];
     const schedsData = schedsRes && schedsRes.ok ? await schedsRes.json() : {};
     const schedules = schedsData.data || [];
-    const activities = activityRes && activityRes.ok ? await activityRes.json() : [];
+    const activityData = activityRes && activityRes.ok ? await activityRes.json() : [];
+    const activities = Array.isArray(activityData) ? activityData : (activityData.items || []);
+    const analytics = analyticsRes && analyticsRes.ok ? await analyticsRes.json() : null;
 
     // KPI 1: Total Posts
     const totalPostsEl = document.getElementById('kpi-total-posts');
@@ -48,15 +55,46 @@ export async function loadDashboardData() {
     if (scheduledEl) scheduledEl.textContent = activeScheduled.length || 0;
 
     // KPI 4: Successfully Published
-    const publishedHistory = history.filter(h => (h.publication_state || '').toUpperCase() === 'PUBLISHED');
     const publishedEl = document.getElementById('kpi-published-posts');
-    if (publishedEl) publishedEl.textContent = publishedHistory.length || 0;
+    if (publishedEl) {
+      if (analytics && analytics.successful_publications !== undefined) {
+        publishedEl.textContent = analytics.successful_publications;
+      } else {
+        const publishedHistory = history.filter(h => (h.publication_state || '').toUpperCase() === 'PUBLISHED');
+        publishedEl.textContent = publishedHistory.length || 0;
+      }
+    }
+
+    // Dynamic Average AI Quality Meter
+    const dashboardAiEl = document.getElementById('dashboard-ai-quality');
+    const dashboardAiBadge = document.getElementById('dashboard-ai-badge');
+    if (dashboardAiEl) {
+      if (analytics && analytics.average_ai_score !== null && analytics.average_ai_score !== undefined) {
+        dashboardAiEl.textContent = `${analytics.average_ai_score}%`;
+        if (dashboardAiBadge) {
+          if (analytics.average_ai_score >= 80) {
+            dashboardAiBadge.textContent = 'PASSED SAFETY & TONE AUDIT';
+            dashboardAiBadge.className = 'badge badge-emerald';
+          } else {
+            dashboardAiBadge.textContent = 'STANDARD AUDIT COMPLETED';
+            dashboardAiBadge.className = 'badge badge-indigo';
+          }
+        }
+      } else {
+        dashboardAiEl.textContent = 'N/A';
+        if (dashboardAiBadge) {
+          dashboardAiBadge.textContent = 'AWAITING REVIEWS';
+          dashboardAiBadge.className = 'badge badge-gray';
+        }
+      }
+    }
 
     // Render Recent Operations feed
     renderDashboardActivities(activities);
   } catch (err) {
     console.warn('Dashboard data loading error:', err);
   }
+
 }
 
 function renderDashboardActivities(activities) {

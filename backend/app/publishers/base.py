@@ -15,12 +15,13 @@ class BasePublisher(ABC):
     """Abstract base class for all platform publisher implementations."""
 
     @abstractmethod
-    def publish(self, post: Any, scheduled_post: Optional[Any] = None) -> PublishResult:
+    def publish(self, post: Any, scheduled_post: Optional[Any] = None, db: Optional[Any] = None) -> PublishResult:
         """Publish a post to the designated platform.
 
         Args:
             post: The Post model instance containing content, media, platform, etc.
             scheduled_post: The ScheduledPost model instance if published via schedule.
+            db: Optional database session to avoid opening un-isolated sessions.
 
         Returns:
             PublishResult containing the status, external ID, and payload.

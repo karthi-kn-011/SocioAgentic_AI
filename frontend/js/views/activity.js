@@ -1,26 +1,65 @@
 import { toast } from '../components/toast.js';
 
 let cachedActivityLogs = [];
+let currentPage = 1;
+const pageSize = 20;
+let totalRecords = 0;
+let currentSearch = '';
+let currentAction = 'ALL';
+let searchDebounceTimeout = null;
 
 /**
- * Activity & Audit Log View Manager - Connected to real backend activity feed.
+ * Activity & Audit Log View Manager - Connected to server-side paginated activity API.
  */
 export async function initActivityView() {
   const searchInput = document.getElementById('activity-search-input');
   const filterSelect = document.getElementById('activity-filter-select');
+  const prevBtn = document.getElementById('activity-prev-btn');
+  const nextBtn = document.getElementById('activity-next-btn');
 
   if (searchInput && !searchInput.dataset.bound) {
     searchInput.dataset.bound = 'true';
     searchInput.addEventListener('input', () => {
-      filterActivityRows(searchInput.value.toLowerCase(), filterSelect?.value || 'ALL');
+      clearTimeout(searchDebounceTimeout);
+      searchDebounceTimeout = setTimeout(() => {
+        currentSearch = searchInput.value.trim();
+        currentPage = 1;
+        loadActivityLogs();
+      }, 250);
     });
   }
 
   if (filterSelect && !filterSelect.dataset.bound) {
     filterSelect.dataset.bound = 'true';
     filterSelect.addEventListener('change', () => {
-      filterActivityRows(searchInput?.value.toLowerCase() || '', filterSelect.value);
+      currentAction = filterSelect.value;
+      currentPage = 1;
+      loadActivityLogs();
     });
+  }
+
+  if (prevBtn && !prevBtn.dataset.bound) {
+    prevBtn.dataset.bound = 'true';
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        loadActivityLogs();
+      }
+    });
+  }
+
+  if (nextBtn && !nextBtn.dataset.bound) {
+    nextBtn.dataset.bound = 'true';
+    nextBtn.addEventListener('click', () => {
+      if (currentPage * pageSize < totalRecords) {
+        currentPage++;
+        loadActivityLogs();
+      }
+    });
+  }
+
+  if (typeof window.isUserAuthenticated === 'function' && !window.isUserAuthenticated()) {
+    return;
   }
 
   await loadActivityLogs();
@@ -30,11 +69,38 @@ export async function loadActivityLogs() {
   const tbody = document.getElementById('activity-table-body');
   if (!tbody) return;
 
+  const skip = (currentPage - 1) * pageSize;
+  const params = new URLSearchParams();
+  params.set('skip', skip.toString());
+  params.set('limit', pageSize.toString());
+
+  if (currentAction && currentAction !== 'ALL') {
+    params.set('action', currentAction);
+  }
+  if (currentSearch) {
+    params.set('search', currentSearch);
+  }
+
   try {
-    const res = await fetch('/api/v1/health/activity?limit=100');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    cachedActivityLogs = await res.json();
+    const res = await fetch(`/api/v1/activity?${params.toString()}`);
+    if (!res.ok) {
+      // Fallback to legacy health endpoint if /activity router is unavailable
+      const fallbackRes = await fetch('/api/v1/health/activity?limit=100');
+      if (!fallbackRes.ok) throw new Error(`HTTP ${res.status}`);
+      const raw = await fallbackRes.json();
+      cachedActivityLogs = Array.isArray(raw) ? raw : (raw.items || []);
+      totalRecords = cachedActivityLogs.length;
+      renderActivityRows(cachedActivityLogs);
+      updatePaginationControls();
+      return;
+    }
+
+    const data = await res.json();
+    cachedActivityLogs = data.items || [];
+    totalRecords = data.total !== undefined ? data.total : cachedActivityLogs.length;
+
     renderActivityRows(cachedActivityLogs);
+    updatePaginationControls();
   } catch (err) {
     console.warn('Failed to load activity logs:', err);
     tbody.innerHTML = `
@@ -44,6 +110,29 @@ export async function loadActivityLogs() {
         </td>
       </tr>
     `;
+    updatePaginationControls();
+  }
+}
+
+function updatePaginationControls() {
+  const pageInfo = document.getElementById('activity-page-info');
+  const prevBtn = document.getElementById('activity-prev-btn');
+  const nextBtn = document.getElementById('activity-next-btn');
+
+  const start = totalRecords === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const end = Math.min(currentPage * pageSize, totalRecords);
+  const totalPages = Math.ceil(totalRecords / pageSize) || 1;
+
+  if (pageInfo) {
+    pageInfo.textContent = `Showing ${start}-${end} of ${totalRecords} events (Page ${currentPage} of ${totalPages})`;
+  }
+
+  if (prevBtn) {
+    prevBtn.disabled = currentPage <= 1;
+  }
+
+  if (nextBtn) {
+    nextBtn.disabled = currentPage >= totalPages || totalRecords === 0;
   }
 }
 
@@ -70,7 +159,7 @@ function renderActivityRows(logs) {
     const action = l.action || 'ACTIVITY';
 
     if (action.includes('PUBLISHED') || action.includes('APPROVED')) badgeClass = 'badge-emerald';
-    else if (action.includes('REJECTED')) badgeClass = 'badge-danger';
+    else if (action.includes('REJECTED') || action.includes('FAILED')) badgeClass = 'badge-danger';
     else if (action.includes('SCHEDULED')) badgeClass = 'badge-cyan';
     else if (action.includes('CANCELLED')) badgeClass = 'badge-gray';
 
@@ -91,16 +180,6 @@ function renderActivityRows(logs) {
       </tr>
     `;
   }).join('');
-}
-
-function filterActivityRows(query, actionFilter) {
-  const filtered = cachedActivityLogs.filter(l => {
-    const text = `${l.action} ${l.actor} ${l.details} ${l.post_id}`.toLowerCase();
-    const matchesQuery = !query || text.includes(query);
-    const matchesAction = actionFilter === 'ALL' || l.action === actionFilter;
-    return matchesQuery && matchesAction;
-  });
-  renderActivityRows(filtered);
 }
 
 export function inspectActivityDetails(action, details, timestamp) {

@@ -27,7 +27,7 @@ class InstagramPublisher(BasePublisher):
         # Strict Mock Mode Guardrail
         if settings.MOCK_SOCIAL_PUBLISHING:
             logger.info("MOCK_SOCIAL_PUBLISHING is True; delegating Instagram publication to MockPublisher.")
-            return MockPublisher().publish(post=post, scheduled_post=scheduled_post)
+            return MockPublisher().publish(post=post, scheduled_post=scheduled_post, db=db)
 
         # 1. Extract Media URL (Instagram strictly requires media)
         media_url = None

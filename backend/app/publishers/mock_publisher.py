@@ -12,7 +12,7 @@ class MockPublisher(BasePublisher):
     def __init__(self, default_failure: bool = False):
         self.default_failure = default_failure
 
-    def publish(self, post: Any, scheduled_post: Optional[Any] = None) -> PublishResult:
+    def publish(self, post: Any, scheduled_post: Optional[Any] = None, db: Optional[Any] = None) -> PublishResult:
         # Prioritize platform on scheduled_post over post.platform
         target_platform = None
         if scheduled_post and getattr(scheduled_post, "target_platforms", None) and len(scheduled_post.target_platforms) > 0:

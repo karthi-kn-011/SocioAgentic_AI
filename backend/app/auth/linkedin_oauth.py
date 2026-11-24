@@ -76,10 +76,10 @@ class LinkedInOAuthService:
             with httpx.Client(timeout=15.0) as client:
                 resp = client.post(LINKEDIN_TOKEN_URL, data=data, headers=headers)
                 if resp.status_code != 200:
-                    logger.error("LinkedIn token exchange failed (%s): %s", resp.status_code, resp.text)
+                    logger.error("LinkedIn token exchange failed with HTTP status %s", resp.status_code)
                     raise HTTPException(
                         status_code=400,
-                        detail=f"Failed to exchange authorization code with LinkedIn: {resp.text}"
+                        detail="Failed to exchange authorization code with LinkedIn. Provider returned an error."
                     )
                 return resp.json()
         except httpx.RequestError as exc:

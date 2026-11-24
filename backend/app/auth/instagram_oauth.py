@@ -64,7 +64,7 @@ class InstagramOAuthService:
             with httpx.Client(timeout=15.0) as client:
                 resp = client.get(url, params=params)
                 if resp.status_code != 200:
-                    logger.error("Failed to query linked Instagram account (%s): %s", resp.status_code, resp.text)
+                    logger.error("Failed to query linked Instagram account with HTTP status %s", resp.status_code)
                     return None
                 data = resp.json()
                 ig_acc = data.get("instagram_business_account")

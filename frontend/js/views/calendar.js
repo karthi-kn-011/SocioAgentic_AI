@@ -110,6 +110,9 @@ export function formatScheduleDateTime(item, targetTz) {
  * Initialize calendar view.
  */
 export async function initCalendarView() {
+  if (typeof window.isUserAuthenticated === 'function' && !window.isUserAuthenticated()) {
+    return;
+  }
   await loadSchedules();
   renderCalendar();
 }

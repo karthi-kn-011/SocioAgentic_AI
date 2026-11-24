@@ -32,8 +32,9 @@ def setup_database():
     Base.metadata.create_all(bind=engine)
     app.dependency_overrides[get_db] = override_get_db
     yield
-    app.dependency_overrides.clear()
+    app.dependency_overrides.pop(get_db, None)
     Base.metadata.drop_all(bind=engine)
+    engine.dispose()
     if os.path.exists("./test_cancel_resched_temp.db"):
         try:
             os.remove("./test_cancel_resched_temp.db")
