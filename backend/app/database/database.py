@@ -6,13 +6,26 @@ from ..config import settings
 
 logger = logging.getLogger("Database")
 
+# Support Vercel serverless writable /tmp directory for SQLite
+db_url = settings.DATABASE_URL
+if os.environ.get("VERCEL") and db_url.startswith("sqlite"):
+    import shutil
+    db_path = "/tmp/social_agent.db"
+    local_db = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "social_agent.db"))
+    if os.path.exists(local_db) and not os.path.exists(db_path):
+        try:
+            shutil.copy2(local_db, db_path)
+        except Exception as e:
+            logger.warning(f"Failed to copy local database to /tmp: {e}")
+    db_url = f"sqlite:///{db_path}"
+
 # Determine engine connection arguments (SQLite requires check_same_thread=False)
 connect_args = {}
-if settings.DATABASE_URL.startswith("sqlite"):
+if db_url.startswith("sqlite"):
     connect_args["check_same_thread"] = False
 
 engine = create_engine(
-    settings.DATABASE_URL,
+    db_url,
     connect_args=connect_args,
     echo=False,
     pool_pre_ping=True

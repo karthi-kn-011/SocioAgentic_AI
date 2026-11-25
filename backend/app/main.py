@@ -36,10 +36,21 @@ logger = logging.getLogger("SocialAgent")
 async def lifespan(app: FastAPI):
     """Application lifespan manager for startup and shutdown events."""
     logger.info(f"Starting {settings.APP_NAME} in [{settings.ENVIRONMENT}] mode...")
-    init_db()
-    start_scheduler()
+    try:
+        init_db()
+    except Exception as e:
+        logger.warning(f"Database init warning: {e}")
+    if not os.environ.get("VERCEL"):
+        try:
+            start_scheduler()
+        except Exception as e:
+            logger.warning(f"Scheduler start warning: {e}")
     yield
-    stop_scheduler()
+    if not os.environ.get("VERCEL"):
+        try:
+            stop_scheduler()
+        except Exception as e:
+            pass
     logger.info(f"Shutting down {settings.APP_NAME}...")
 
 app = FastAPI(
@@ -110,7 +121,12 @@ app.include_router(activity_router, prefix="/api", dependencies=[Depends(verify_
 
 
 # Mount Static Frontend
-frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend"))
+candidates = [
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend")),
+    os.path.abspath(os.path.join(os.getcwd(), "frontend")),
+    os.path.abspath("frontend"),
+]
+frontend_dir = next((c for c in candidates if os.path.exists(c)), candidates[0])
 if os.path.exists(frontend_dir):
     app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
 
